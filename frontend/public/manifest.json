@@ -1,0 +1,15 @@
+{
+  "short_name": "Cartels of NZ",
+  "name": "Explore ownership structures of business in New Zealand",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#fff",
+  "background_color": "#000"
+}
