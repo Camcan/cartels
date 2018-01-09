@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import { baseUrl } from '../../config/api.js';
+import Util from '../../utils/admin.js';
 import Menu from './menu.js';
 import Content from './content.js';
-import Editor from './editor.js';
+import CompanyList from './companyList.js';
 
 export default class Admin extends Component {
    constructor(props){ 
       super(props);
       this.state = {
          ...props,
-         selectedPage: "Explore"
+         selectedPage: "Explore",
+         selectedCompany: null,
+         companyList: []
       }
    }
    componentWillMount(){
-   
+       let companies = Util.getCompanyList();
+       console.log("Companies:", companies)
+       this.setState({companyList: companies})
    }
    componentWillReceiveProps(newProps){
    
@@ -24,10 +29,10 @@ export default class Admin extends Component {
    renderContent(){
        switch(this.state.selectedPage) {
             case "Explore":
-               return null
+               return <CompanyList companyList={this.state.companyList} />
                break;
             case "Edit":
-               return <Editor />
+               return null;
                break;
             default:
                return null
