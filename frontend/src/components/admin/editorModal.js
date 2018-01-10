@@ -16,15 +16,15 @@ export default class EditorModal extends Component {
    }
    componentWillReceiveProps(newProps){
      
-      if (newProps !== this.state.props){
          this.setState({ ...newProps});
          if (newProps.companyData) {
-            this.setState({companyList: this.props.companyList.filter((c)=> {
-                  return (c.id != newProps.companyData.id)
-               })
+            this.setState({
+               companyList: this.props.companyList.filter((c)=> {
+                 return (c.id != newProps.companyData.id)
+               }),
+               stagedData: {}
             });
          }
-      }
    }
    stageChange(key, e){
       let value = e.target.value;
@@ -78,7 +78,7 @@ export default class EditorModal extends Component {
       if (current.children) {
          console.log("Existing Children...", current.children)
          companyList = this.props.companyList.filter((c)=> {
-            (!current.children.includes(c.id) & (c.id != this.props.companyData.id) )
+            return (!current.children.includes(c.id) & (c.id != this.props.companyData.id) )
          });
          console.log("CompanyList:", companyList)
       };
@@ -86,7 +86,8 @@ export default class EditorModal extends Component {
          <div className="control">
            <div className="select">
                <select id="child-companies" onChange={(e)=> this.toggleCompany(e.target.value, 'children')}>
-                     <option>Company</option>
+                     <option>Select Company</option>
+
                      {
                         companyList.map((c)=> {
                            return <option value={c.id}>{c.name}</option>
@@ -111,8 +112,8 @@ export default class EditorModal extends Component {
                            <label className="label">Company Name:</label>
                            <div className="control">
                               <input className="input" type="text" 
-                                 value={staged.name || current.name}
-                                 onChange={(e)=>this.stageChange("companyName", e)}
+                                 value={(staged.name) ? staged.name : current.name}
+                                 onChange={(e)=>this.stageChange("name", e)}
                                  placeholder="Company Name" />
                            </div>
                         </div>
