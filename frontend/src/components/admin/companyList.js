@@ -17,23 +17,32 @@ export default class CompanyList extends Component {
       this.setState({selectedCompany: c});
       this.toggleModal(true);
    }
+   newCompany(){
+      this.setState({selectedCompany: null});
+      this.toggleModal(true);
+   }
    toggleModal(truthy){
       this.setState({modalOpen: truthy});
+   }
+   _renderList(){
+      return this.props.companyList.map((x)=>{
+         return (
+            <a className="button is-dark" style={{width: "100%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
+               <p style={{width: "100%", textAlign: "left"}}>{x.name}</p>
+            </a>
+         )
+      })
+
    }
    render(){
       return (
          <div>
             <h3 className="title">Companies Editor</h3>
-            <div className="card">
-               {
-                  this.props.companyList.map((x)=>{
-                     return (
-                        <a className="button is-dark" style={{width: "90%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
-                           {x.name}
-                        </a>
-                     )
-                  })
-               }
+            <div className="card" style={{padding: "20px 50px"}}>
+               <div style={{display: "flex", justifyContent: "flex-end"}}>
+                  <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
+               </div>
+               { this._renderList() }
             </div>
             <EditorModal 
                companyData={this.state.selectedCompany} 
