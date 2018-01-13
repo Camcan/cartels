@@ -3,7 +3,7 @@ import { baseUrl } from '../../config/api.js';
 import Util from '../../utils/admin.js';
 import Menu from './menu.js';
 import Content from './content.js';
-import CompanyList from './companyList.js';
+import CompanyExplorer from './explorer.js';
 
 export default class Admin extends Component {
    constructor(props){ 
@@ -29,7 +29,7 @@ export default class Admin extends Component {
    renderContent(){
        switch(this.state.selectedPage) {
             case "Explore":
-               return <CompanyList companyList={this.state.companyList} />
+               return <CompanyExplorer companyList={this.state.companyList} />
                break;
             case "Edit":
                return null;
@@ -42,7 +42,6 @@ export default class Admin extends Component {
    render(){
       return (
          <div style={{width: "100%"}}>
-            <h2>Admin Panel</h2>
             <div style={{height: "100%", display: "flex", flexFlow:"row nowrap"}}>
                <Menu selectPage={this.selectPage.bind(this)} selected={this.state.selectedPage}/>
                <Content>

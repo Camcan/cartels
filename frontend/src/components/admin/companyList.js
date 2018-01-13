@@ -36,12 +36,10 @@ export default class CompanyList extends Component {
    }
    render(){
       return (
-         <div>
-            <h3 className="title">Companies Editor</h3>
-            <div className="card" style={{
+         <div className="card" style={{
                maxWidth: "800px", 
                padding: "20px 50px"
-            }}>
+         }}>
             <header className="card-header">
                 <p className="card-header-title">
                       Companies
@@ -49,14 +47,14 @@ export default class CompanyList extends Component {
                <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
             </header>
                { this._renderList() }
-            </div>
             <EditorModal 
                companyData={this.state.selectedCompany} 
                companyList={this.state.companyList} 
                closeModal={()=> this.toggleModal(false)} 
                modalOpen={this.state.modalOpen}
             />
+
          </div>
-      )
+                  )
    }
 }
