@@ -38,10 +38,16 @@ export default class CompanyList extends Component {
       return (
          <div>
             <h3 className="title">Companies Editor</h3>
-            <div className="card" style={{padding: "20px 50px"}}>
-               <div style={{display: "flex", justifyContent: "flex-end"}}>
-                  <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
-               </div>
+            <div className="card" style={{
+               maxWidth: "800px", 
+               padding: "20px 50px"
+            }}>
+            <header className="card-header">
+                <p className="card-header-title">
+                      Companies
+               </p> 
+               <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
+            </header>
                { this._renderList() }
             </div>
             <EditorModal 

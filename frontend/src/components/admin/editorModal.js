@@ -138,17 +138,22 @@ export default class EditorModal extends Component {
       let staged = this.state.stagedData;
       let current = this.props.companyData || {};
       let activeClass = (this.state.modalOpen) ? "is-active " : "";
+      let currentName = (staged.name) ? staged.name : current.name;
       console.log("Staged:", staged)
       return (
          <div className={"modal " + activeClass }>
             <div className="modal-background" onClick={this.props.closeModal}></div>
                <div className="modal-card">
+                  <header className="modal-card-head">
+                     <p className="modal-card-title">{currentName}</p>
+                     <p>{current.id}</p>
+                  </header>
                   <div className="modal-card-body">   
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Company Name:</label>
                         <div className="control">
                            <input className="input" type="text" 
-                              value={(staged.name) ? staged.name : current.name}
+                              value={currentName}
                               onChange={(e)=>this.stageChange("name", e)}
                               placeholder="Company Name" />
                         </div>
