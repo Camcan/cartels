@@ -26,7 +26,7 @@ class Connector extends EventEmitter{
 
    createCompany(co, cb){	
       var company = {
-         id: uuid.v4(), 
+        _id: uuid.v4(), 
          name: co.name,
          est: co.est
       };
