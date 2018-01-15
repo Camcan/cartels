@@ -16,12 +16,16 @@ export default class Admin extends Component {
       }
    }
    componentWillMount(){
-       let companies = Util.getCompanyList();
-       console.log("Companies:", companies)
-       this.setState({companyList: companies})
+      this.updateCompanyList()
    }
    componentWillReceiveProps(newProps){
    
+   }
+   updateCompanyList(){
+       Util.getCompanyList((companies)=>{
+         console.log("Companies:", companies)
+         this.setState({companyList: companies})
+       })
    }
    selectPage(page){
       this.setState({selectedPage: page})

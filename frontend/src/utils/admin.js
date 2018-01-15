@@ -1,9 +1,17 @@
+var conf = require('../config/api.js');
+
+const serverUrl = conf.baseUrl;
+
 const AdminUtil = {
-   getCompanyList: ()=>{
-      return [
-            { id: 1234, name: "CompanyA"},
-            { id: 4323, name: "Random company"}
-         ]
+   getCompanyList: (cb)=>{
+      
+      fetch([serverUrl, "companies"].join(','))
+         .then((res)=>{
+            cb(res)
+         })
+         .catch((error)=>{
+            throw error
+         });
    }
 }
 
