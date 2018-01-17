@@ -25,7 +25,6 @@ export default class CompanyList extends Component {
       this.setState({modalOpen: truthy});
    }
    _renderList(){
-      console.log("CompanyList:", this.props.companyList)
       return this.props.companyList.map((x)=>{
          return (
             <a className="button is-dark" style={{width: "100%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
@@ -50,7 +49,7 @@ export default class CompanyList extends Component {
                { this._renderList() }
             <EditorModal 
                companyData={this.state.selectedCompany} 
-               companyList={this.state.companyList} 
+               companyList={this.props.companyList} 
                refreshData={this.props.refreshData}
                closeModal={()=> this.toggleModal(false)} 
                modalOpen={this.state.modalOpen}

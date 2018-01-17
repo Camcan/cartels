@@ -12,11 +12,7 @@ export default class EditorModal extends Component {
       }
    }
    componentWillReceiveProps(newProps){
-     
-         this.setState({ 
-            ...newProps,
-            stageDelete: false            
-         });
+         this.clearModal();  
          if (newProps.companyData) {
             this.setState({
                companyList: this.props.companyList.filter((c)=> {
@@ -25,9 +21,14 @@ export default class EditorModal extends Component {
                stagedData: {},
                editing: true
             });
-         }else{
-            this.setState({editing: false})
          }
+   }
+   clearModal(){
+      this.setState({
+         editing: false,
+         stageDelete: false,
+         stagedData: {}
+      });
    }
    stageChange(key, e){
       let value = e.target.value;
@@ -35,7 +36,6 @@ export default class EditorModal extends Component {
          let toStage= this.state.stagedData;
          toStage[key] = value;
          this.setState({stagedData: toStage})
-         console.log("Staged Data:", this.state.stagedData);
       }
    }
    saveChange(action){
@@ -43,6 +43,7 @@ export default class EditorModal extends Component {
           AdminUtil.createCompany(this.state.stagedData, (res)=>{
             this.props.refreshData();
             this.props.closeModal();
+            this.clearModal();
          })
       } else if (action == 'update'){
          
@@ -50,8 +51,7 @@ export default class EditorModal extends Component {
       
       }
    }
-   toggleCompany(idString, rel){
-      let id = parseInt(idString);
+   toggleCompany(id, rel){
       let staged = this.state.stagedData;
       let current = this.props.companyData || {};
       let selected = (staged[rel] || current[rel] || []);
@@ -77,7 +77,7 @@ export default class EditorModal extends Component {
                      none
                   </a> : toRender.map( (x) => {
                      let company = this.props.companyList.filter((c)=>{
-                        return c.id == x
+                        return c._id == x
                      })[0];
                      console.log("Child company:", company);
                      return <span onClick={()=>this.toggleCompany(x, 'children')} className="button">
@@ -91,14 +91,13 @@ export default class EditorModal extends Component {
    }
    _renderDropdown(){
       let current = this.state.stagedData || this.props.companyData;
-      let companyList = this.state.companyList;
-      let id = (this.state.editing) ? this.props.companyData.id : 0;
+      let companyList = this.props.companyList;
+      let id = (this.state.editing) ? this.props.companyData._id : 0;
       if (current.children) {
          console.log("Existing Children...", current.children)
          companyList = this.props.companyList.filter((c)=> {
-            return (!current.children.includes(c.id) & (c.id != id) )
+            return (!current.children.includes(c._id) & (c._id != id) )
          });
-         console.log("CompanyList:", companyList)
       };
       return (
          <div className="control">
@@ -108,7 +107,7 @@ export default class EditorModal extends Component {
 
                      {
                         companyList.map((c)=> {
-                           return <option value={c.id}>{c.name}</option>
+                           return <option value={c._id}>{c.name}</option>
                         })
                      }
                </select>
@@ -124,7 +123,7 @@ export default class EditorModal extends Component {
                <span class="icon is-small">
                   <i class="fas fa-check"></i>
                </span>
-               {(this.state.editing) ? "Save Changes": "Save Changes"}
+               {(this.state.editing) ? "Save Changes": "Create Company"}
             </button>
       )
    }
@@ -141,9 +140,8 @@ export default class EditorModal extends Component {
    render(){
       let staged = this.state.stagedData;
       let current = this.props.companyData || {};
-      let activeClass = (this.state.modalOpen) ? "is-active " : "";
-      let currentName = (staged.name) ? staged.name : current.name;
-      console.log("Staged:", staged)
+      let activeClass = (this.props.modalOpen) ? "is-active " : "";
+      let currentName = (staged.name) ? staged.name : (current.name || "");
       return (
          <div className={"modal " + activeClass }>
             <div className="modal-background" onClick={this.props.closeModal}></div>
