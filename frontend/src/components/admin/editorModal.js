@@ -107,12 +107,14 @@ export default class EditorModal extends Component {
    }
    _renderDropdown(){
       let current = this.state.stagedData || this.props.companyData;
-      let companyList = this.props.companyList;
       let id = (this.state.editing) ? this.props.companyData._id : 0;
+      let companyList = this.props.companyList.filter((c)=>{
+         return c._id != id
+      });
       if (current.children) {
          console.log("Existing Children...", current.children)
-         companyList = this.props.companyList.filter((c)=> {
-            return (!current.children.includes(c._id) & (c._id != id) )
+         companyList = companyList.filter((c)=> {
+            return !current.children.includes(c._id)
          });
       };
       return (
