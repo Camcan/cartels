@@ -3,7 +3,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const connector = require('./connector');
 const config = require('../conf'); 
+const cors = require('cors');
 
+app.use(cors());
 app.use(bodyParser.json());
 
 
@@ -28,6 +30,24 @@ app.post('/api/companies/create', (req, res)=>{
    }
    console.log("COMPANY:", company);
    c.createCompany(company, (err,result)=>{
+      if (err) res.status(300).send(err) 
+      else res.status(200).send(result)
+   })
+})
+app.post('/api/companies/edit', (req, res)=>{
+   let company = {
+      name: req.body.name,
+      est: req.body.est,
+      children: req.body.children
+   }
+   c.updateCompany(company, (err,result)=>{
+         if (err) res.status(300).send(err)
+         else res.status(200).send(result)
+   })
+})
+app.post('/api/companies/remove', (req, res)=>{
+   let id = req.body.id;
+   c.removeCompany(id, (err,result)=>{
       if (err) res.status(300).send(err) 
       else res.status(200).send(result)
    })

@@ -35,6 +35,21 @@ class Connector extends EventEmitter{
          cb(err);
       });   
    }
+   updateCompany(co, cb){	
+      if (this._db.collection('companies').update({_id: co._id}, co) > 0) {
+         cb(null, "Successfully updated " + co.name)
+      } else {
+         cb("ERR - no changes saved to DB")
+      }
+
+   }
+   removeCompany(id, cb){
+      if  (this._db.collection('companies').remove({_id: id}).nRemoved == 1) {
+         cb(null, "Successfully deleted company:" + id)
+      } else {
+         cb("ERR - no changes saved to DB")
+      }
+   }
    // Auth User
    authAdmin(cb){
    }
