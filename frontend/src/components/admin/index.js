@@ -33,7 +33,7 @@ export default class Admin extends Component {
    renderContent(){
        switch(this.state.selectedPage) {
             case "Explore":
-               return <CompanyExplorer companyList={this.state.companyList} />
+               return <CompanyExplorer refreshData={this.updateCompanyList.bind(this)} companyList={this.state.companyList} />
                break;
             case "Edit":
                return null;

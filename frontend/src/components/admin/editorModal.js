@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AdminUtil from '../../utils/admin.js';
 
 export default class EditorModal extends Component {
    constructor(props){ 
@@ -39,7 +40,10 @@ export default class EditorModal extends Component {
    }
    saveChange(action){
       if (action == 'create'){
-      
+          AdminUtil.createCompany(this.state.stagedData, (res)=>{
+            this.props.refreshData();
+            this.props.closeModal();
+         })
       } else if (action == 'update'){
          
       } else if (action == 'delete') {

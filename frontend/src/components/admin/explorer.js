@@ -19,7 +19,7 @@ export default class Explorer extends Component {
                 <p className="title">
                   Explore
                </p> 
-               <CompanyList companyList={this.state.companyList} />
+               <CompanyList refreshData={this.props.refreshData} companyList={this.props.companyList} />
          </div>
                   )
    }
