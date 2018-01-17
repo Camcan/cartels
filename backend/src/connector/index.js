@@ -36,7 +36,7 @@ class Connector extends EventEmitter{
       });   
    }
    updateCompany(co, cb){	
-      if (this._db.collection('companies').update({_id: co._id}, co) > 0) {
+      if (this._db.collection('companies').update({_id: co._id}, co).nModified > 0) {
          cb(null, "Successfully updated " + co.name)
       } else {
          cb("ERR - no changes saved to DB")

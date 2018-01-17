@@ -34,12 +34,13 @@ app.post('/api/companies/create', (req, res)=>{
       else res.status(200).send(result)
    })
 })
-app.post('/api/companies/edit', (req, res)=>{
+app.post('/api/companies/update', (req, res)=>{
    let company = {
+      _id: req.body._id,
       name: req.body.name,
       est: req.body.est,
       children: req.body.children
-   }
+   };
    c.updateCompany(company, (err,result)=>{
          if (err) res.status(300).send(err)
          else res.status(200).send(result)

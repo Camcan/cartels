@@ -46,9 +46,25 @@ export default class EditorModal extends Component {
             this.clearModal();
          })
       } else if (action == 'update'){
-         
+         let postData = {
+            ...this.props.companyData,
+            ...this.state.stagedData,
+            _id: this.props.companyData._id
+         };
+         console.log("Update Initialized...", postData)
+         AdminUtil.updateCompany(postData, (res)=>{
+            console.log(res);
+            this.props.refreshData();
+            this.props.closeModal();
+            this.clearModal(); 
+        });
       } else if (action == 'delete') {
-      
+         console.log("Deletion Initialized..") 
+         AdminUtil.removeCompany(this.props.companyData._id, (res)=>{
+            this.props.refreshData();
+            this.props.closeModal();
+            this.clearModal();
+         })
       }
    }
    toggleCompany(id, rel){
@@ -161,6 +177,15 @@ export default class EditorModal extends Component {
                         </div>
                      </div>
                      <div className="field is-horizontal">
+                        <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>
+                        <div className="control">
+                           <input className="input" type="text" 
+                              value={current.est || staged.est}
+                              onChange={(e)=>this.stageChange("est", e)}
+                              placeholder="Date Established" />
+                        </div>
+                     </div>
+                     <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Child Companies:</label>
                         <div className="control">
                            {this._renderChildren(staged, current)}
@@ -175,7 +200,7 @@ export default class EditorModal extends Component {
                   </div>
                   <div className="modal-card-foot">
                      { this._renderSaveButton() }
-                     { this._renderDeleteButton() } 
+                     { (this.state.editing) ? this._renderDeleteButton() : null } 
                      <button className="button" onClick={this.props.closeModal}>Cancel</button>
                   </div>
                </div>
