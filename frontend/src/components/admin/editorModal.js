@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 import AdminUtil from '../../utils/admin.js';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class EditorModal extends Component {
    constructor(props){ 
@@ -16,7 +20,7 @@ export default class EditorModal extends Component {
          if (newProps.companyData) {
             this.setState({
                companyList: this.props.companyList.filter((c)=> {
-                 return (c.id != newProps.companyData.id)
+                 return (c._id != newProps.companyData._id)
                }),
                stagedData: {},
                editing: true
@@ -105,18 +109,18 @@ export default class EditorModal extends Component {
                </div>
             )
    }
-   _renderDropdown(){
-      let current = this.state.stagedData || this.props.companyData;
+   _renderDropdown(current, staged){
+      let children = (staged) ? (staged.children || current.children) : ((current.children) ? current.children : []);
       let id = (this.state.editing) ? this.props.companyData._id : 0;
       let companyList = this.props.companyList.filter((c)=>{
          return c._id != id
       });
-      if (current.children) {
-         console.log("Existing Children...", current.children)
+      if (children) {
+         console.log("Existing Children...", children)
          companyList = companyList.filter((c)=> {
-            return !current.children.includes(c._id)
+            return !children.includes(c._id)
          });
-      };
+      }
       return (
          <div className="control">
            <div className="select">
@@ -181,12 +185,21 @@ export default class EditorModal extends Component {
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>
                         <div className="control">
-                           <input className="input" type="text" 
-                              value={current.est || staged.est}
+                        <DatePicker selected={moment((current.est||staged.est))}
+                           onChange={(t)=>this.setState({
+                                 stagedData: {
+                                    ...this.state.stagedData,
+                                    est: (t) ? t.unix() : undefined
+                                 }
+                           })}
+                        />   
+                        <input className="input" type="text" 
+                              value={moment(((staged.est)? staged.est : current.est)||new Date()).format('MMMM Do YYYY')}
                               onChange={(e)=>this.stageChange("est", e)}
                               placeholder="Date Established" />
                         </div>
                      </div>
+                     
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Child Companies:</label>
                         <div className="control">
@@ -196,7 +209,7 @@ export default class EditorModal extends Component {
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>New Child:</label>
                         <div className="control">
-                           {this._renderDropdown()} 
+                           {this._renderDropdown(staged, current)} 
                         </div>
                      </div>
                   </div>
