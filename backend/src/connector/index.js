@@ -46,9 +46,21 @@ class Connector extends EventEmitter{
    removeCompany(id, cb){
       if  (this._db.collection('companies').remove({_id: id}).nRemoved == 1) {
          cb(null, "Successfully deleted company:" + id)
+      
+         console.log("Successfully removed company: " + id);
       } else {
          cb("ERR - no changes saved to DB")
       }
+      this._db.collection('companies').find({children: id}).forEach((co)=>{
+         console.log("FOREACH HIT- co:", co);
+         let i = co.children.indexOf(id);
+         if (i !== -1) { 
+            console.log("INDEX " + i + " CHILDREN BEING SPLICED FROM " + co.children.length)
+            co.children.splice(i,1);
+            console.log("TO  " + co.children.length, co);
+            console.log(this._db.collection('companies').save(co).nModified);
+         }
+      });
    }
    // Auth User
    authAdmin(cb){
