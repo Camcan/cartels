@@ -1,0 +1,10 @@
+.main {
+   left: 0;
+   right: 0;
+}
+
+@media screen and (min-width: 1200px){
+   .main{
+      padding-top: 100px;
+   }
+}

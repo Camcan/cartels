@@ -15,13 +15,13 @@ WORKDIR /webpacked
 COPY . /webpacked
 RUN cp -a /tmp/node_modules /webpacked
 RUN npm run build
-RUN npm install http-server -g
+RUN npm install forever -g
 
 
 ENV NODE_ENV=production
 ENV PORT=4000
 ENV BACKEND_URL="http://localhost:3001"
 
-CMD ["http-server", "./build", "-p", "4000"]
+CMD ["forever", "start", "./server.js"]
 
 EXPOSE 4000
