@@ -23,7 +23,22 @@ class Connector extends EventEmitter{
          cb(err, result);
       });
    }
-
+   getRelationships(cb){
+      let relationships = [];
+      var companies = this._db.collection('companies').find({}).toArray((err, result)=>{
+         console.log("Companies:", result, result.length, result[0])
+         for (var i = 0; i < result.length; i++){
+            if (result[i].children) result[i].children.forEach((ch)=>{
+               relationships.push({from: result[i]._id, to: ch})
+               console.log("Relationships:", relationships);
+            })
+            if (i == result.length - 1){
+               this._db.close();
+               cb(null, relationships);
+            };
+         };
+      });
+   }
    createCompany(co, cb){	
       var company = {
         _id: uuid.v4(), 
@@ -52,12 +67,9 @@ class Connector extends EventEmitter{
          cb("ERR - no changes saved to DB")
       }
       this._db.collection('companies').find({children: id}).forEach((co)=>{
-         console.log("FOREACH HIT- co:", co);
          let i = co.children.indexOf(id);
          if (i !== -1) { 
-            console.log("INDEX " + i + " CHILDREN BEING SPLICED FROM " + co.children.length)
             co.children.splice(i,1);
-            console.log("TO  " + co.children.length, co);
             console.log(this._db.collection('companies').save(co).nModified);
          }
       });

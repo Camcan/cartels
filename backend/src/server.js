@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const async = require('async');
+const cors = require('cors');
 const connector = require('./connector');
 const config = require('../conf'); 
-const cors = require('cors');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,6 +21,25 @@ app.get('/api/companies', (req, res)=>{
    c.getCompanies((err, companies)=>{
       if (err) res.status(300).send(err) 
       else res.status(200).send(companies)
+   })
+})
+app.get('/api/companies/relationships', (req, res)=>{
+   async.parallel([
+      (cb)=>{
+         c.getCompanies(cb)
+      },
+      (cb) => {
+         c.getRelationships(cb);  
+      }
+   ], (err, arr) => {
+      if(!err){
+         res.status(200).send(JSON.stringify({
+            companyList: arr[0],
+            relationships: arr[1]
+         }));
+      }else{
+         res.status(300).send(err);
+      }
    })
 })
 app.post('/api/companies/create', (req, res)=>{
