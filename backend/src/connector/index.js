@@ -1,6 +1,5 @@
 const EventEmitter = require('events');
 const mongodb = require('mongodb').MongoClient;
-const async = require('async');
 const uuid = require('uuid');
 
 
@@ -23,21 +22,20 @@ class Connector extends EventEmitter{
          cb(err, result);
       });
    }
-   getRelationships(cb){
+   getRelationships(companies, cb){
       let relationships = [];
-      var companies = this._db.collection('companies').find({}).toArray((err, result)=>{
-         console.log("Companies:", result, result.length, result[0])
-         for (var i = 0; i < result.length; i++){
-            if (result[i].children) result[i].children.forEach((ch)=>{
-               relationships.push({from: result[i]._id, to: ch})
+      console.log("Companies:", companies, companies.length, companies[0])
+      for (var i = 0; i < companies.length; i++){
+         if (companies[i].children) {
+            companies[i].children.forEach((ch)=>{
+               relationships.push({from: companies[i]._id, to: ch})
                console.log("Relationships:", relationships);
             })
-            if (i == result.length - 1){
-               this._db.close();
-               cb(null, relationships);
-            };
          };
-      });
+         if (i == companies.length - 1){
+            cb(null, relationships);
+         };
+      };
    }
    createCompany(co, cb){	
       var company = {

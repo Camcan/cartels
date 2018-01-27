@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const async = require('async');
 const cors = require('cors');
 const connector = require('./connector');
 const config = require('../conf'); 
@@ -24,23 +23,20 @@ app.get('/api/companies', (req, res)=>{
    })
 })
 app.get('/api/companies/relationships', (req, res)=>{
-   async.parallel([
-      (cb)=>{
-         c.getCompanies(cb)
-      },
-      (cb) => {
-         c.getRelationships(cb);  
-      }
-   ], (err, arr) => {
+   c.getCompanies((err, arr)=>{
       if(!err){
-         res.status(200).send(JSON.stringify({
-            companyList: arr[0],
-            relationships: arr[1]
-         }));
+         console.log(arr);
+         c.getRelationships(arr, (err, rels)=>{  
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).send(JSON.stringify({
+               companyList: arr,
+               relationships: rels
+            }));
+         });
       }else{
          res.status(300).send(err);
       }
-   })
+   });
 })
 app.post('/api/companies/create', (req, res)=>{
    console.log("BODY:", req.body);
