@@ -15,18 +15,19 @@
   },
   "dependencies": {
     "bulma": "^0.6.1",
+    "express": "^4.15.3",
+    "history": "^4.6.3",
+    "json-loader": "^0.5.7",
     "moment": "^2.20.1",
     "react": "^15.6.1",
     "react-datepicker": "^1.0.4",
     "react-dom": "^15.6.1",
-    "express": "^4.15.3",
-    "history": "^4.6.3",
-    "json-loader": "^0.5.7",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^4.0.8",
-    "redux": "^3.7.1"
+    "redux": "^3.7.1",
+    "vis": "^4.21.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

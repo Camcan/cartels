@@ -1,6 +1,5 @@
 # Temp//Swap files (courtesy of Vim)
-.*.swp
-.*.swo
+.*.sw*
 *~
 
 # Logs

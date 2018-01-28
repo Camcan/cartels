@@ -9,6 +9,7 @@ import Header from './components/header/index.jsx';
 import Footer from './components/page/footer.jsx';
 import Opener from './components/page/opener.jsx';
 import Home from './components/home/index.jsx';
+import Network from './components/network/index.jsx';
 import About from './components/about/index.jsx';
 import Styles from './app.css';
 import './css/normalize.css';
@@ -42,6 +43,7 @@ class App extends Component {
                            <Route exact path={"/"}>
                               <Home>
                                  <Opener opener={["Cartels; market domination is good for business."]} />
+                                 <Network />
                               </Home>
                            </Route>
                            <Route path="/about">
