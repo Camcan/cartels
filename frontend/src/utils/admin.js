@@ -12,8 +12,8 @@ const AdminUtil = {
          console.log("ServerUrl:", serverUrl)
          cb(data)             
       })
-      .catch((error)=>{
-         throw error
+      .catch((err)=>{
+         throw err
       });
     },
    createCompany: (data, cb)=>{

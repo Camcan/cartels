@@ -3,7 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const BUILD_DIR = path.resolve(__dirname, 'client/public');
-const APP_DIR = path.resolve(__dirname, '`client/app');
+const APP_DIR = path.resolve(__dirname, 'client/app');
 
 const config = {
    entry: APP_DIR + '/index.jsx',
@@ -16,7 +16,11 @@ const config = {
          {
             test: /\.(js|jsx)$/,
             include: APP_DIR,
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            query: {
+               presets:['react','es2015', 'stage-0']
+            }
+
          },
          {
             test: /\.json$/,
