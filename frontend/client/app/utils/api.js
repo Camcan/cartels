@@ -2,7 +2,7 @@ var conf = require('../config/api.js');
 const serverUrl = conf.baseUrl;
 
 const API = {
-    getCompanyList: (cb)=>{
+   getCompanyList: (cb)=>{
     fetch(
             [serverUrl, "companies"].join(''),
             {mode: 'cors'}

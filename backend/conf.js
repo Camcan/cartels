@@ -3,6 +3,4 @@ const config = {
 };
 
 module.exports = {
-   db: config
-   //secret: "Somethingsupersecret"
-}
+   db: config}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="theme-color" content="#000000">
+<!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+<!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+
+<title>Cartels?|login</title>
+</head>
+<body>
+<noscript>
+   You need to enable JavaScript to run this app.
+</noscript>
+<script type="javascript">
+  
+    </script>
+<section class="hero is-success is-fullheight">
+   <div class="hero-body">
+      <div class="container has-text-centered">
+         <div class="column is-4 is-offset-4">
+            <h3 class="title has-text-grey">Login</h3>
+            <p class="subtitle has-text-grey">Please login to proceed.</p>
+            <div class="box">
+               <form action="/login" method="post">
+                  <div class="field">
+                     <div class="control">
+                        <input class="input is-large" id="email" type="email" placeholder="Your Email" autofocus="">
+                     </div>
+                  </div>
+
+                  <div class="field">
+                     <div class="control">
+                        <input class="input is-large" id="password" type="password" placeholder="Your Password">
+                     </div>
+                  </div>
+                  <div class="field">
+                     <label class="checkbox">
+                        <input type="checkbox">
+                        Remember me
+                     </label>
+                  </div>
+                     <a class="button is-block is-info is-large" onclick="var data = {
+                              email: document.getElementById('email').value,
+                              password: document.getElementById('password').value
+                           };
+                           var xhr = new XMLHttpRequest();
+                           xhr.open('POST', '/login', true);
+                           xhr.setRequestHeader('Content-Type', 'application/json');
+                           xhr.send(JSON.stringify(data));
+                           xhr.responseType = 'json';
+                           xhr.onreadystatechange = function () {
+                             var DONE = 4;
+                              var OK = 200; 
+                              if (xhr.readyState === DONE) {
+                                 if (xhr.status === OK) 
+                                 var res = JSON.parse(xhr.response);
+                                 console.log(res, 'Token:', res.token, res['token']);
+                                 var redir = './admin?token=' + res['token'];
+                                 window.localStorage.setItem('token', res.token);
+                                 window.location.href = redir;
+                              } else {
+                                    console.log('Error: ' + xhr.status); 
+                              };
+                           };">Login</a>
+               </form>
+            </div>
+            <p class="has-text-grey">
+                &nbsp;·&nbsp; <a href="/">Return to Site</a> &nbsp;·&nbsp;
+            </p>
+         </div>
+      </div>
+   </div>
+</section>
+<script async="" type="text/javascript" src="../js/bulma.js"></script>
+
+
+
+<!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</body>
+</html>

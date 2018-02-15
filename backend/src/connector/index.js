@@ -16,11 +16,17 @@ class Connector extends EventEmitter{
             }
       });           
    }
-
+   addUser(user, cb){
+      this._db.collection('users').insertOne(user, cb);
+   }
+   getUsers(cb){
+      this._db.collection('users').find({}).toArray(cb);
+   }
+   getUser(user, cb){
+      this._db.collection('users').findOne(user, cb)
+   }
    getCompanies(cb){
-      this._db.collection('companies').find({}).toArray((err, result) => {
-         cb(err, result);
-      });
+      this._db.collection('companies').find({}).toArray(cb);
    }
    getRelationships(companies, cb){
       let relationships = [];

@@ -14,11 +14,13 @@
     "start": "node ./server.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "bulma": "^0.6.1",
     "express": "^4.15.3",
     "history": "^4.6.3",
     "json-loader": "^0.5.7",
     "moment": "^2.20.1",
+    "node-fetch": "^2.0.0",
     "react": "^15.6.1",
     "react-datepicker": "^1.0.4",
     "react-dom": "^15.6.1",
