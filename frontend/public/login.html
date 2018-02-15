@@ -70,9 +70,9 @@
                               if (xhr.readyState === DONE) {
                                  if (xhr.status === OK) 
                                  var res = JSON.parse(xhr.response);
-                                 console.log(res, 'Token:', res.token, res['token']);
-                                 var redir = './admin?token=' + res['token'];
-                                 window.localStorage.setItem('token', res.token);
+                                 console.log(res, 'Token:', res.token, res.token);
+                                 var redir = './admin?token=' + res.token;
+                                 window.localStorage.setItem('auth-token', res.token);
                                  window.location.href = redir;
                               } else {
                                     console.log('Error: ' + xhr.status); 

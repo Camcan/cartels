@@ -1,6 +1,8 @@
-var conf = require('../config/api.js');
-
+import AuthUtil from './auth.js';
+const conf = require('../config/api.js');
 const serverUrl = conf.baseUrl;
+
+const authToken = AuthUtil.getToken;
 
 const AdminUtil = {
    getCompanyList: (cb)=>{
@@ -22,7 +24,10 @@ const AdminUtil = {
          {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: new Headers({'Content-Type': 'application/json'})
+            headers: new Headers({
+                  'x-access-token': authToken(),
+                  'Content-Type': 'application/json'
+            })
          }
       ).catch(error => console.error('Error:', error))
       .then(response => cb(response));
@@ -33,7 +38,10 @@ const AdminUtil = {
          {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: new Headers({'Content-Type': 'application/json'})
+            headers: new Headers({
+               'x-access-token': authToken(),
+               'Content-Type': 'application/json'
+            })
          }
       ).catch(error => console.error('Error:', error))
       .then(response => cb(response));
@@ -46,7 +54,10 @@ const AdminUtil = {
             body: JSON.stringify({
                "id": id
             }),
-            headers: new Headers({'Content-Type': 'application/json'})
+            headers: new Headers({
+               'x-access-token': authToken(),
+               'Content-Type': 'application/json'
+            })
          }
       ).catch(error => console.error('Error:', error))
       .then(response => cb(response));

@@ -5,7 +5,15 @@
    height: 20px;
    background: rgba(255,255,255, 0.3);
    display: flex;
+   justify-content: space-between;
+}
+.main a {
+   color: #000;
+}
+.creators {
+   display: flex;
    flex-flow: row nowrap;
+   width: 300px;
    justify-content: flex-end;
 }
 
@@ -15,7 +23,6 @@
 }
 
 .creator, .creator a {
-   color: #000;
    opacity: 0.7;
    transition: 0.3s opacity
 }
