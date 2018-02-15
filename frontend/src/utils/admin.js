@@ -7,17 +7,16 @@ const authToken = AuthUtil.getToken;
 const AdminUtil = {
    getCompanyList: (cb)=>{
     fetch(
-            [serverUrl, "companies"].join(''),
-            {mode: 'cors'}
-      ).then((res)=>res.json())
-      .then((data)=>{
-         console.log("ServerUrl:", serverUrl)
-         cb(data)             
-      })
-      .catch((err)=>{
-         throw err
-      });
-    },
+      [serverUrl, "companies"].join(''),
+      {mode: 'cors'}
+   ).then((res)=>res.json())
+   .then((data)=>{
+      cb(data)             
+   })
+   .catch((err)=>{
+      throw err
+   });
+   },
    createCompany: (data, cb)=>{
       fetch(
          [serverUrl, "companies/create"].join(''),

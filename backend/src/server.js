@@ -26,7 +26,6 @@ app.get('/api/users', (req, res) => {
    })
 })
 app.post('/api/newuser', (req, res) => {
-   console.log("REQ.BODY", req.body);
    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
    c.addUser({
             email: req.body.email,
@@ -46,9 +45,7 @@ app.post('/api/newuser', (req, res) => {
    });
 });
 app.post('/api/login', (req,res)=>{
-   console.log("LOGGING IN:", req.body);
    c.getUser({email: req.body.email}, (err, user)=>{
-         console.log("RETRIEVED USER:", user);
          if (err) return res.status(500).send('Error on the server.');
          if (!user) return res.status(404).send('No user found.');
          const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
@@ -60,9 +57,7 @@ app.post('/api/login', (req,res)=>{
    });
 });
 app.post('/api/verify', (req, res)=>{
-   console.log("Verifying...")
    verifyToken(req, res, ()=>{
-      console.log("AUTH VERIFIED")
       res.status(200).json(JSON.stringify({auth: true}))
    })
 });
@@ -94,7 +89,6 @@ app.post('/api/companies/create', verifyToken, (req, res, next)=>{
       name: req.body.name,
       est: req.body.est
    }
-   console.log("NEW COMPANY:", company);
    c.createCompany(company, (err,result)=>{
       if (err) res.status(300).send(err) 
       else res.status(200).send(result)

@@ -19,14 +19,12 @@ app.get(['/', '/home'], (req, res)=> {
 })
 app.get('/admin', (req, res)=> {
    let token = (req.param('token')) ? req.param('token') : req.headers['x-access-token'];
-   console.log("TOKEN RECEUVED:", token);
    auth.check(token, (err, auth)=>{
       if (err) return res.status(500).sendFile(path.join(__dirname, 'build/login.html'));
       return ( auth ) ?  res.status(200).sendFile(path.join(__dirname, 'build/index.html')) : res.redirect('/login');
    })
 })
 app.get('/login', (req, res)=>{
-   console.log("Logging in...");
    auth.check(req.headers['x-access-token'], (err, auth)=>{
       if (err) return res.status(500).sendFile(path.join(__dirname, 'build/login.html'))
       console.log(auth)
@@ -34,9 +32,7 @@ app.get('/login', (req, res)=>{
    })
 })
 app.post('/login', (req, res)=>{
-   console.log("LOGIN ATTEMPT:", req.body)
    if ((typeof req.body.email == 'string') && (typeof req.body.password == 'string')){
-      console.log("IT'S ALL STRINGY");
       auth.login({
             email: req.body.email,
             password: req.body.password
@@ -44,7 +40,6 @@ app.post('/login', (req, res)=>{
          (err, resp)=>{
             if (err) throw err;
             else {
-               console.log("LOGIN RESP:", resp)
                res.status(200).json(resp);
             }
          }
@@ -58,7 +53,6 @@ app.use(function(req, res) {
 
 app.use(function(error, req, res, next) {
    res.status(500);
-  // res.render('500.jade', {title:'500: Internal Server Error', error: error});
 })
 
 app.listen(app.get('port'), function() {
