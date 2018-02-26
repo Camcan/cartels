@@ -1,20 +1,35 @@
 const EventEmitter = require('events');
 const mongodb = require('mongodb').MongoClient;
 const uuid = require('uuid');
+const async = require('async');
+const Loki = require('lokijs');
 
 
 class Connector extends EventEmitter{
    
    constructor(config){
       super();
-      mongodb.connect(config.mongo, (err, db) => {
+      async.parallel([
+            (cb)=> mongodb.connect(config.mongo, (err, db)=> cb(err, db)),
+            (cb)=> {
+               const loki = new Loki('${config.uploads.path}/${config.uploads.db_name}', { persistenceMethod: 'fs' });
+               cb(null, loki);
+            }
+         ], (err, cons)=>{
             if(!err){
-               this._db = db;
+               this._db = cons[0];
+               this.loki = cons[1];
                this.emit('ready');
             }else{
                this.emit('error', err);
             }
-      });           
+      }); 
+   }
+   loadLokiCollection(colName, cb, loki = this.loki){
+      loki.loadDatabase({}, () => {
+         const collection = loki.getCollection(colName) || loki.addCollection(colName);
+         cb(collection);
+      });
    }
    addUser(user, cb){
       this._db.collection('users').insertOne(user, cb);
@@ -78,9 +93,6 @@ class Connector extends EventEmitter{
          }
       });
    }
-   // Auth User
-   authAdmin(cb){
-   }
-}
+};
 
 module.exports = Connector;

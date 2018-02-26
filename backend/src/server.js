@@ -8,7 +8,9 @@ const cors = require('cors');
 const connector = require('./connector');
 const config = require('../conf'); 
 const verifyToken = require('./utils/auth.js');
-
+const upload = require('./utils/multer.js');
+const fs = require('fs');
+const path = require('path');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -93,6 +95,45 @@ app.post('/api/companies/create', verifyToken, (req, res, next)=>{
       if (err) res.status(300).send(err) 
       else res.status(200).send(result)
    })
+})
+app.post('/api/companies/logos/:company_id',  upload.single('company-logo'), async (req, res) => {
+   try {
+      c.loadLokiCollection('company-images', (col) =>{
+         const data = col.insert(req.file);
+         c.loki.saveDatabase();
+         res.send({ 
+            id: data.$loki, 
+            fileName: data.filename, 
+            originalName: data.originalname 
+         });
+      })  
+   } catch (err) {
+      res.sendStatus(400);
+   };
+})
+app.get('/api/companies/logos', async (req, res) => {
+   try {
+      await c.loadLokiCollection('company-images', (col)=>{
+         res.send(col.data);
+      });
+   } catch (err) {
+      res.sendStatus(400);
+   }
+})
+app.get('/api/companies/logos/:id', async (req, res) => {
+   try {
+      await c.loadLokiCollection('company-images', (col)=>{
+         const result = col.findOne(req.params.id);
+         if (!result) {
+            res.sendStatus(404);
+            return;
+         };
+         res.setHeader('Content-Type', result.mimetype);
+         fs.createReadStream(path.join(config.db.uploads.path, result.filename)).pipe(res);
+      });
+   } catch (err) {
+      res.sendStatus(400);
+   }
 })
 app.post('/api/companies/update', verifyToken, (req, res, next)=>{
    let company = {
