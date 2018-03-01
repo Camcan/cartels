@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import EditorModal from './editorModal.js';
+import questionmark from '../../img/questionmark.png';
 
 export default class CompanyList extends Component {
    constructor(props){
@@ -26,8 +27,12 @@ export default class CompanyList extends Component {
    }
    _renderList(){
       return this.props.companyList.map((x)=>{
+         let logoUrl = x.logoUrl || questionmark;
          return (
             <a className="button is-dark" style={{width: "100%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
+               <div style={{borderRadius: "50%", width: "30px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden"}}>
+                  <img style={{maxWidth: "50px"}} src={logoUrl} />
+               </div>
                <p style={{width: "100%", textAlign: "left"}}>{x.name}</p>
             </a>
          )
@@ -56,6 +61,6 @@ export default class CompanyList extends Component {
             />
 
          </div>
-                  )
+      )
    }
 }
