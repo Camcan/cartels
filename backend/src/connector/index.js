@@ -69,13 +69,28 @@ class Connector extends EventEmitter{
          cb(err);
       });   
    }
-   updateCompany(co, cb){	
-      if (this._db.collection('companies').update({_id: co._id}, co).nModified > 0) {
+   updateCompany(id, co, cb){	
+      if (this._db.collection('companies').update({_id: id}, co).nModified > 0) {
          cb(null, "Successfully updated " + co.name)
       } else {
          cb("ERR - no changes saved to DB")
       }
 
+   }
+   saveCompanyLogo(companyId, file, cb, colName = 'company-images', loki = this.loki){
+       try {
+          loki.loadDatabase({}, () => {
+            const col = loki.getCollection(colName) || loki.addCollection(colName);
+            const data = col.insert(file);
+            cb(null,{
+               id: data.$loki,
+               fileName: data.filename,
+               originalName: data.originalname
+            });
+         });
+       } catch (err) {
+         cb(err)
+       }
    }
    removeCompany(id, cb){
       if  (this._db.collection('companies').remove({_id: id}).nRemoved == 1) {

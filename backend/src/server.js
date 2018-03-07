@@ -96,20 +96,19 @@ app.post('/api/companies/create', verifyToken, (req, res, next)=>{
       else res.status(200).send(result)
    })
 })
-app.post('/api/companies/logos/:company_id',  upload.single('company-logo'), async (req, res) => {
-   try {
-      c.loadLokiCollection('company-images', (col) =>{
-         const data = col.insert(req.file);
-         c.loki.saveDatabase();
-         res.send({ 
-            id: data.$loki, 
-            fileName: data.filename, 
-            originalName: data.originalname 
-         });
-      })  
-   } catch (err) {
-      res.sendStatus(400);
-   };
+app.post('/api/companies/logos/:id',  upload.single('company-logo'), async (req, res) => {
+    c.saveCompanyLogo(req.params.id, req.file, (err, result)=>{
+      if (err) res.status(500).send(err)
+      else {
+         c.updateCompany(req.params.id, {
+            $set: {
+               logoUrl: 'companies/logos/' + result.id
+            }
+         }, (err, resp)=>{
+            res.status(200).send(result);
+         })
+      }
+   })  
 })
 app.get('/api/companies/logos', async (req, res) => {
    try {
@@ -123,6 +122,7 @@ app.get('/api/companies/logos', async (req, res) => {
 app.get('/api/companies/logos/:id', async (req, res) => {
    try {
       await c.loadLokiCollection('company-images', (col)=>{
+         console.log("Retrieving logo for company:", req.params.id);
          const result = col.findOne(req.params.id);
          if (!result) {
             res.sendStatus(404);
@@ -136,13 +136,12 @@ app.get('/api/companies/logos/:id', async (req, res) => {
    }
 })
 app.post('/api/companies/update', verifyToken, (req, res, next)=>{
-   let company = {
-      _id: req.body._id,
+   let data = {
       name: req.body.name,
       est: req.body.est,
       children: req.body.children
    };
-   c.updateCompany(company, (err,result)=>{
+   c.updateCompany(req.body._id, data, (err,result)=>{
          if (err) res.status(300).send(err)
          else res.status(200).send(result)
    })
