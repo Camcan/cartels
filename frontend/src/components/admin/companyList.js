@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import EditorModal from './editorModal.js';
+import API from '../../config/api.js';
 import questionmark from '../../img/questionmark.png';
+
+const baseUrl = API.baseUrl;
 
 export default class CompanyList extends Component {
    constructor(props){
@@ -27,7 +30,7 @@ export default class CompanyList extends Component {
    }
    _renderList(){
       return this.props.companyList.map((x)=>{
-         let logoUrl = x.logoUrl || questionmark;
+         let logoUrl = (x.logoUrl) ? baseUrl + x.logoUrl : questionmark;
          return (
             <a className="button is-dark" style={{width: "100%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
                <div style={{borderRadius: "50%", width: "30px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden"}}>

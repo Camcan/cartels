@@ -10,8 +10,8 @@ app.set('port', (process.env.PORT || 3000));
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use('/', express.static(path.join(__dirname, 'client/public')));
-app.use('/static', express.static(path.join(__dirname, 'build/static')));
+app.use(express.static('./client/public'));
+app.use('/static', express.static('./build/static'));
 app.locals.settings['x-powered-by'] = false;
 
 app.get(['/', '/home'], (req, res)=> {

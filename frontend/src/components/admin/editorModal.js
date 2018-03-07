@@ -183,6 +183,13 @@ export default class EditorModal extends Component {
                         </div>
                      </div>
                      <div className="field is-horizontal">
+                        <label className="label" style={{width: "150px", textAlign: "right"}}>Logo:</label>
+                        <div className="control">
+                           <input className="input" type="file" 
+                              onChange={(e)=>console.log(e)} />
+                        </div>
+                     </div>
+                     <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>
                         <div className="control">
                         <DatePicker selected={moment((current.est||staged.est))}
