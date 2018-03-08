@@ -6,7 +6,7 @@
   "scripts": {
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "watch": "webpack -d --watch && react-scripts start",
+    "watch": "webpack -d --watch & react-scripts start",
     "build-admin": "react-scripts build",
     "build-client": "webpack -p --config webpack.config.prod.js",
     "build-all": "npm run build-client & npm run build-admin",

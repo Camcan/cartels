@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import AdminUtil from '../../utils/admin.js';
-
+import config from '../../config/api.js';
 import 'react-datepicker/dist/react-datepicker.css';
+
+const baseUrl = config.baseUrl;
 
 export default class EditorModal extends Component {
    constructor(props){ 
@@ -137,6 +139,27 @@ export default class EditorModal extends Component {
          </div>
       )
    }
+   stageLogo(e){
+      this.setState({stagedLogo: e.target.files[0]});
+   }
+   uploadLogo(){
+      AdminUtil.uploadLogo(this.props.companyData._id, this.state.stagedLogo, (res)=>{
+        console.log(res);
+         this.props.refreshData(); 
+      })   
+   }
+   _renderLogoUpload(){
+      console.log("UPLOAD RENDERED");
+      if (this.state.editing) return (
+            <div className="field is-horizontal">
+               <label className="label" style={{width: "150px", textAlign: "right"}}>Logo:</label>
+               <div className="control">
+                     <input type="file" name="company-logo" accept=".jpg, .jpeg, .png" onChange={(e)=>this.stageLogo(e)}/>
+                     <button onClick={()=>this.uploadLogo()}>Upload</button> 
+               </div>
+            </div>
+      )
+   }
    _renderSaveButton(){
       let action = (this.state.editing) ? 'update' : 'create';
       return (
@@ -182,13 +205,8 @@ export default class EditorModal extends Component {
                               placeholder="Company Name" />
                         </div>
                      </div>
-                     <div className="field is-horizontal">
-                        <label className="label" style={{width: "150px", textAlign: "right"}}>Logo:</label>
-                        <div className="control">
-                           <input className="input" type="file" 
-                              onChange={(e)=>console.log(e)} />
-                        </div>
-                     </div>
+                     
+                     {this._renderLogoUpload()}
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>
                         <div className="control">

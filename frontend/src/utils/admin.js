@@ -45,7 +45,22 @@ const AdminUtil = {
       ).catch(error => console.error('Error:', error))
       .then(response => cb(response));
    },
-   removeCompany(id, cb){
+   uploadLogo: (id, file, cb)=>{
+      const formData = new FormData();
+      formData.append('company-logo', file); 
+      fetch(
+         [serverUrl, "companies/logos/", id].join(''),
+         {
+            method: 'POST',
+            body: formData,
+            headers: new Headers({
+               'x-access-token': authToken()
+            })
+         }
+      ).catch(error => console.log('Error:', error))
+      .then(response => cb(response));
+   },
+   removeCompany: (id, cb)=>{
       fetch(
          [serverUrl, "companies/remove"].join(''),
          {
