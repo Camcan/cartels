@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
-import AdminUtil from '../../utils/admin.js';
-import config from '../../config/api.js';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const baseUrl = config.baseUrl;
+import moment from 'moment';
+import AdminUtil from '../../../utils/admin.js';
+import config from '../../../config/api.js';
+import LogoUploader from './logoUpload.js';
+import questionmark from '../../../img/questionmark.png';
 
 export default class EditorModal extends Component {
    constructor(props){ 
@@ -139,25 +139,14 @@ export default class EditorModal extends Component {
          </div>
       )
    }
-   stageLogo(e){
-      this.setState({stagedLogo: e.target.files[0]});
-   }
-   uploadLogo(){
-      AdminUtil.uploadLogo(this.props.companyData._id, this.state.stagedLogo, (res)=>{
-        console.log(res);
-         this.props.refreshData(); 
-      })   
+   _renderLogo(co){
+         const logoUrl = (co.logoUrl) ? config.baseUrl + co.logoUrl : questionmark;
+         return <img src={logoUrl} style={{maxWidth: "100px"}}/>
    }
    _renderLogoUpload(){
       console.log("UPLOAD RENDERED");
       if (this.state.editing) return (
-            <div className="field is-horizontal">
-               <label className="label" style={{width: "150px", textAlign: "right"}}>Logo:</label>
-               <div className="control">
-                     <input type="file" name="company-logo" accept=".jpg, .jpeg, .png" onChange={(e)=>this.stageLogo(e)}/>
-                     <button onClick={()=>this.uploadLogo()}>Upload</button> 
-               </div>
-            </div>
+         <LogoUploader companyId={this.props.companyData._id} refreshData={this.props.refreshData}/>
       )
    }
    _renderSaveButton(){
@@ -193,7 +182,7 @@ export default class EditorModal extends Component {
                <div className="modal-card">
                   <header className="modal-card-head">
                      <p className="modal-card-title">{currentName}</p>
-                     <p>{current.id}</p>
+                     {this._renderLogo(current)}
                   </header>
                   <div className="modal-card-body">   
                      <div className="field is-horizontal">

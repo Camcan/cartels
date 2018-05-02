@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import EditorModal from './editorModal.js';
+import EditorModal from './editor/index.js';
 import API from '../../config/api.js';
 import questionmark from '../../img/questionmark.png';
 
