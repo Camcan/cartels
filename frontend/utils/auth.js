@@ -1,11 +1,16 @@
 const fetch = require('node-fetch');
-const serverUrl = (process.env.NODE_ENV == 'production') ? process.env.BACKEND_URL : 'http://localhost:3001/api/';
+const ip = require('ip');
+
+let serverUrl = ip.address(); 
+serverUrl = 'http://' + serverUrl + ':3000/api/'; //process.env.BACKEND_URL
+
 
 const authUtil = {
    check: function(token, next) {
       if (!token) return next(null, false);
       fetch(serverUrl + 'verify', {
-         method: 'POST', 
+         method: 'POST',
+         mode: 'cors',
          body: JSON.stringify({token: token}), 
          headers: {'Content-Type': 'application/json'}
       }).then(res => res.json())
@@ -18,6 +23,7 @@ const authUtil = {
    login: function(credentials, next){
       fetch(serverUrl + 'login', {
             method: 'POST',
+            mode: 'cors',   
             body: JSON.stringify(credentials),
             headers: { 'Content-Type': 'application/json'}
       }).then(res =>{ 

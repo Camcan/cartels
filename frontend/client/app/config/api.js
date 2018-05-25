@@ -1,3 +1,3 @@
 module.exports = {
-   baseUrl: 'http://' + window.location.hostname + ':3001/api/'
+   baseUrl: 'http://' + window.location.hostname + ':3000/api/'
 }

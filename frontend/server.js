@@ -6,7 +6,7 @@ const app = express();
 const auth = require('./utils/auth.js');
 
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 80));
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());

@@ -11,10 +11,16 @@ const verifyToken = require('./utils/auth.js');
 const upload = require('./utils/multer.js');
 const fs = require('fs');
 const path = require('path');
+const ip = require('ip');
 
-app.use(cors());
+app.use(cors({
+      origin: 'http://' + "localhost", // ip.address(),
+      optionSuccessStatus: 200
+   })
+);
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
 
 
 var c =  new connector(config.db);
@@ -97,12 +103,14 @@ app.post('/api/companies/create', verifyToken, (req, res, next)=>{
    })
 })
 app.post('/api/companies/logos/:id',  upload.single('company-logo'), async (req, res) => {
-    c.saveCompanyLogo(req.params.id, req.file, (err, result)=>{
+   console.log(typeof req.file);
+   c.saveCompanyLogo(req.params.id, req.file, (err, result)=>{
       if (err) res.status(500).send(err)
       else {
-         c.updateCompany(req.params.id, {
+         console.log("Setting logo for ", req.params.id);
+	  c.updateCompany(req.params.id, {
             $set: {
-               logoUrl: 'companies/logos/' + result.id
+               logoUrl: 'companies/logos/' + req.params.id 
             }
          }, (err, resp)=>{
             res.status(200).send(result);
@@ -124,12 +132,18 @@ app.get('/api/companies/logos/:id', async (req, res) => {
       await c.loadLokiCollection('company-images', (col)=>{
          console.log("Retrieving logo for company:", req.params.id);
          const result = col.findOne(req.params.id);
+	      console.log("Result: ", result)
          if (!result) {
             res.sendStatus(404);
             return;
          };
          res.setHeader('Content-Type', result.mimetype);
-         fs.createReadStream(path.join(config.db.uploads.path, result.filename)).pipe(res);
+         fs.createReadStream(
+		 path.join(
+			 config.db.uploads.path, 
+			 req.params.id
+		 )
+	 ).pipe(res);
       });
    } catch (err) {
       res.sendStatus(400);

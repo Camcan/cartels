@@ -20,7 +20,7 @@ RUN npm install forever -g
 
 ENV NODE_ENV=production
 ENV PORT=4000
-ENV BACKEND_URL="http://backend-srv:3000/api/"
+ENV BACKEND_URL="http://localhost:3000/api/"
 
 CMD ["forever", "./server.js"]
 

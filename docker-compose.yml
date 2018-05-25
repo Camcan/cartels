@@ -1,32 +1,9 @@
 version: '3'
 
 services:
-  mongo-db:
-    image: mvertes/alpine-mongo
-    volumes:
-      - ./backend:/usr/src/app
-    ports:
-      - 27017:27017
-  mongo-backup:
-    image: "istepanov/mongodump:3.4"
-    volumes:
-      - ./mongo-backup:/backup
-    environment:
-      MONGO_HOST: mongo-db
-      CRON_SCHEDULE: '0 1 * * *'
-    depends_on:
-      - mongo-db
-  backend-srv:
-    build: ./backend
-    ports:
-      - 3001:3000
-    depends_on:
-      - mongo-db
   frontend:
     build: ./frontend
     volumes:
       - ./website:/usr/src/app/www
     ports:
       - 80:4000
-    depends_on:
-      - backend-srv

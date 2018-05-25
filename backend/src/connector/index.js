@@ -81,12 +81,17 @@ class Connector extends EventEmitter{
        try {
           loki.loadDatabase({}, () => {
             const col = loki.getCollection(colName) || loki.addCollection(colName);
+            console.log(typeof file);
             const data = col.insert(file);
-            cb(null,{
-               id: data.$loki,
-               fileName: data.filename,
-               originalName: data.originalname
-            });
+            
+	    const datas = {
+               id: companyId,
+               fileName: file.filename,
+               originalName: file.originalname
+            };
+	    console.log(datas)
+            cb(null, datas)
+	
          });
        } catch (err) {
          cb(err)

@@ -6,8 +6,7 @@ const upload = multer();
 
 const imageStore = multer.diskStorage({
       destination: (req, file, cb)=>{
-         let companyId = req.params.id;
-         let dest = conf.db.uploads.path + companyId;
+         let dest = (conf.db.uploads.path);
          if (!fs.existsSync(dest)){
             mkdirp(dest, (err)=>{
                if (err) console.error(err)
@@ -16,8 +15,7 @@ const imageStore = multer.diskStorage({
          } else cb(null, dest);
    },
    filename: (req, file, cb)=>{
-      var f =  req.params.id;
-      cb(null, f)
+      cb(null, req.params.id)
    } 
 })
 

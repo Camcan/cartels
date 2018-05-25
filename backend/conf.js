@@ -1,7 +1,7 @@
 const config = {
-   mongo: 'mongodb://mongo-db/auth',
+   mongo: 'mongodb://localhost',
    uploads: {
-      path: '/uploads/companies/logos',
+      path: './uploads/logos/',
       name: 'db.json'
    }
 };

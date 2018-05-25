@@ -54,6 +54,7 @@ const AdminUtil = {
             method: 'POST',
             body: formData,
             headers: new Headers({
+		'Accept': 'application/json',
                'x-access-token': authToken()
             })
          }
