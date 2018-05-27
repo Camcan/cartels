@@ -48,18 +48,56 @@ class CompanyProfile extends Component {
              ...newProps
          });
 	}
+    _renderChildren(children){
+         if (children) return (
+             <div className={Styles.children}>
+                <h3>Children:</h3>
+                {
+                    children.map((x)=>{
+                        return (
+                            <div 
+                                className={Styles.child}
+                                onClick={
+                                    ()=>this.props.selectCompany(x._id)
+                                }
+                            >
+                                { 
+                                    (x.logoUrl) ? <img 
+                                        src={conf.baseUrl + x.logoUrl} 
+                                    /> : null
+                                }
+                                <p>
+                                    { x.name }
+                                </p>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
+    }
     _renderProfile(){
          const co = this.state.companyList.filter((c)=>{
             return c._id == this.state.selectedCompany;
-        })[0] || {}; 	    
+        })[0] || {};
+        const children = (co.children) ? this.state.companyList.filter((c)=>{
+            return co.children.includes(c._id)
+        }) : null;
         const profileClass = [
             Styles.companyProfile,
             (this.props.selectedCompany) ? Styles.active : ""
         ].join(" ");
         return (
             <div className={profileClass}>
+                { 
+                    (co.logoUrl) ? <img 
+                        className={Styles.logo}
+                        src={conf.baseUrl + co.logoUrl} 
+                    /> : null 
+                }
                 <h2>{co.name}</h2>
-				<p>{co.est}</p>
+                { (co.est) ? <p>{"est: " + co.est }</p> : null }
+                { this._renderChildren(children) }
 			</div>
         );
     }

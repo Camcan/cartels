@@ -23,3 +23,24 @@
 .companyProfile.active {
     max-width: 500px;
 }
+
+.companyProfile .logo {
+    max-width: 200px;
+    margin: 5px auto;
+}
+.companyProfile .children {
+    max-width: 170px;
+}
+.children h3 {
+    margin: 0px;
+}
+.companyProfile .child {
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+.companyProfile .child img {
+    margin: 5px;
+    height: auto;
+    width: 30px;
+}
