@@ -13,6 +13,9 @@ const fs = require('fs');
 const path = require('path');
 const ip = require('ip');
 
+app.use('/api/uploads', express.static(
+    path.join(__dirname, '../uploads')
+));
 app.use(cors({
       origin: 'http://' + "localhost", // ip.address(),
       optionSuccessStatus: 200
@@ -103,14 +106,13 @@ app.post('/api/companies/create', verifyToken, (req, res, next)=>{
    })
 })
 app.post('/api/companies/logos/:id',  upload.single('company-logo'), async (req, res) => {
-   console.log(typeof req.file);
    c.saveCompanyLogo(req.params.id, req.file, (err, result)=>{
       if (err) res.status(500).send(err)
       else {
          console.log("Setting logo for ", req.params.id);
 	  c.updateCompany(req.params.id, {
             $set: {
-               logoUrl: 'companies/logos/' + req.params.id 
+               logoUrl: req.file.path 
             }
          }, (err, resp)=>{
             res.status(200).send(result);
@@ -127,7 +129,7 @@ app.get('/api/companies/logos', async (req, res) => {
       res.sendStatus(400);
    }
 })
-app.get('/api/companies/logos/:id', async (req, res) => {
+app.get('/api/uploads/logos/:id*', async (req, res) => {
    try {
       await c.loadLokiCollection('company-images', (col)=>{
          console.log("Retrieving logo for company:", req.params.id);
@@ -138,12 +140,9 @@ app.get('/api/companies/logos/:id', async (req, res) => {
             return;
          };
          res.setHeader('Content-Type', result.mimetype);
-         fs.createReadStream(
-		 path.join(
-			 config.db.uploads.path, 
-			 req.params.id
-		 )
-	 ).pipe(res);
+		 res.render('image', {
+             path: req.originalUrl
+         });
       });
    } catch (err) {
       res.sendStatus(400);

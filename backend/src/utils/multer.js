@@ -1,6 +1,7 @@
 const multer = require('multer');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
+const path = require('path');
 const conf = require('../../conf.js');
 const upload = multer();
 
@@ -15,7 +16,7 @@ const imageStore = multer.diskStorage({
          } else cb(null, dest);
    },
    filename: (req, file, cb)=>{
-      cb(null, req.params.id)
+      cb(null, req.params.id + path.extname(file.originalname))
    } 
 })
 
