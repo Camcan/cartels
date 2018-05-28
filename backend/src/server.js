@@ -98,7 +98,9 @@ app.get('/api/companies/relationships', (req, res)=>{
 app.post('/api/companies/create', verifyToken, (req, res, next)=>{
    let company = {
       name: req.body.name,
-      est: req.body.est
+      est: req.body.est,
+      children: req.body.children,
+      website: req.body.website
    }
    c.createCompany(company, (err,result)=>{
       if (err) res.status(300).send(err) 
@@ -149,15 +151,24 @@ app.get('/api/uploads/logos/:id*', async (req, res) => {
    }
 })
 app.post('/api/companies/update', verifyToken, (req, res, next)=>{
-   let data = {
-      name: req.body.name,
-      est: req.body.est,
-      children: req.body.children
-   };
-   c.updateCompany(req.body._id, data, (err,result)=>{
+    let toChange = {};
+    [
+        'name', 
+        'est', 
+        'children', 
+        'website', 
+        'logoUrl'
+    ].forEach((i)=>{
+        if (i in req.body){
+            toChange[i] = req.body[i];
+        };
+    })
+    c.updateCompany(req.body._id, {
+        $set: toChange   
+    }, (err,result)=>{
          if (err) res.status(300).send(err)
          else res.status(200).send(result)
-   })
+    })
 })
 app.post('/api/companies/remove', verifyToken, (req, res, next)=>{
    let id = req.body.id;

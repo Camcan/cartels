@@ -28,13 +28,18 @@
     max-width: 200px;
     margin: 5px auto;
 }
+.companyProfile .link {
+    height: 30px;
+}
 .companyProfile .children {
+    margin: 10px;
     max-width: 170px;
 }
 .children h3 {
     margin: 0px;
 }
 .companyProfile .child {
+    margin: 2px 5px 2px 30px;
     display: flex;
     align-items: center;
     height: 40px;

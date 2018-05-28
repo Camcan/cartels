@@ -96,6 +96,13 @@ class CompanyProfile extends Component {
                     /> : null 
                 }
                 <h2>{co.name}</h2>
+                { 
+                    (co.website) ? (
+                        <a className={Styles.link} href={co.website}>
+                            {co.website}
+                        </a>
+                    ) : null
+                }
                 { (co.est) ? <p>{"est: " + co.est }</p> : null }
                 { this._renderChildren(children) }
 			</div>
