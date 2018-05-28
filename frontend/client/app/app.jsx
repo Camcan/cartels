@@ -11,9 +11,11 @@ import Opener from './components/page/opener.jsx';
 import Home from './components/home/index.jsx';
 import CompanyProfile from './components/company/index.jsx';
 import About from './components/about/index.jsx';
-import Styles from './app.css';
+
 import './css/normalize.css';
 import './css/base.css';
+
+
 import Routes from './routes.js';
 
 

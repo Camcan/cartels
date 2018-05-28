@@ -1,51 +1,74 @@
 .container {
+     background: linear-gradient(
+        to right, 
+        rgba(255,255,255,0.7), 
+        rgba(255,255,255,1)
+    ); 
+    width: 100%;
     height: 100%;
-	max-height: 500px;
-    max-width: 1000px;
-    margin: 0px auto;
+}
+
+.top {
+    height: 100px;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-around;
-}
-.network {
-    height: 100%;
-    min-width: 40%;
-    max-width: 500px;
-}
-.companyProfile {
-    overflow: hidden;
-    width: 40%;
-    max-width: 0px;
-    transition: max-width 0.3s ease-in;
-    height: 100%;
+    flex-flow: row-reverse wrap;
+    justify-content: space-between;
 }
 
-.companyProfile.active {
-    max-width: 500px;
+.content {
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    overflow-wrap: break-word;
+    max-width: 60%;
+    min-width: 100px;
 }
-
-.companyProfile .logo {
-    max-width: 200px;
+.top .logo {
+    align-self: center;
+    display: block;
+    max-width: 80px;
+    height: auto;
+    width: auto;
     margin: 5px auto;
 }
-.companyProfile .link {
+.top .link {
+    font-size: 0.9em;
     height: 30px;
 }
-.companyProfile .children {
+.separator {
+    height: 1px;
+    background: #545454;
+    box-shadow: 0px 0px 2px #545454;
+    margin: 20px 0px;
+}
+.children {
     margin: 10px;
-    max-width: 170px;
+    max-width: 300px;
+    max-height: 300px;
+    overflow-y: scroll;
 }
 .children h3 {
     margin: 0px;
 }
-.companyProfile .child {
-    margin: 2px 5px 2px 30px;
+.child {
+    margin: 2px 5px 2px 20px;
     display: flex;
+    justify-content: flex-start;
     align-items: center;
     height: 40px;
 }
-.companyProfile .child img {
-    margin: 5px;
-    height: auto;
-    width: 30px;
+.child .logo {
+    background: #FFF;
+    margin: 2px 5px 2px;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logo img {
+    height: 20px;
+    width: auto;
 }

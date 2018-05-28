@@ -86,10 +86,9 @@ export default class Network extends Component {
    }
     render(){
       return (
-            <div>
-               {this.props.children}
-               <div id="mynetwork" style={{height: '500px', background: "#eee"}}></div>
-            </div>
+               <div id="mynetwork" style={{
+                   height: this.props.height || "500px", 
+                   background: this.props.background || "#eee"}}></div>
       )
    }
 }

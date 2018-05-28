@@ -55,6 +55,7 @@ export default class EditorModal extends Component {
          let postData = {
             ...this.props.companyData,
             ...this.state.stagedData,
+            logoUrl: this.props.companyData.logoUrl,
             _id: this.props.companyData._id
          };
          console.log("Update Initialized...", postData)
@@ -144,7 +145,6 @@ export default class EditorModal extends Component {
          return <img src={logoUrl} style={{maxWidth: "100px"}}/>
    }
    _renderLogoUpload(){
-      console.log("UPLOAD RENDERED");
       if (this.state.editing) return (
          <LogoUploader companyId={this.props.companyData._id} refreshData={this.props.refreshData}/>
       )
@@ -194,7 +194,15 @@ export default class EditorModal extends Component {
                               placeholder="Company Name" />
                         </div>
                      </div>
-                     
+                     <div className="field is-horizontal">
+                        <label className="label" style={{width: "150px", textAlign: "right"}}>Website:</label>
+                        <div className="control">
+                           <input className="input" type="text" 
+                              value={staged.website || current.website || ""}
+                              onChange={(e)=>this.stageChange("website", e)}
+                              placeholder="www.example.com" />
+                        </div>
+                     </div>
                      {this._renderLogoUpload()}
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>

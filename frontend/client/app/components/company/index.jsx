@@ -8,9 +8,9 @@ import {
 } from '../../actions/companies.js'; 
 import API from '../../utils/api.js';
 import conf from '../../config/api.js';
-import Styles from './companyProfile.css';
+import Styles from './styles.css';
 import Network from '../network/index.jsx';
-
+import CompanyProfile from './companyProfile.jsx';
 const mapStateToProps = (state) => {
    return {
       ...state.companies
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
        };
 };
 
-class CompanyProfile extends Component { 
+class NetworkContainer extends Component { 
 	constructor(props){
 		super(props);
 		this.state = {
@@ -48,72 +48,18 @@ class CompanyProfile extends Component {
              ...newProps
          });
 	}
-    _renderChildren(children){
-         if (children) return (
-             <div className={Styles.children}>
-                <h3>Children:</h3>
-                {
-                    children.map((x)=>{
-                        return (
-                            <div 
-                                className={Styles.child}
-                                onClick={
-                                    ()=>this.props.selectCompany(x._id)
-                                }
-                            >
-                                { 
-                                    (x.logoUrl) ? <img 
-                                        src={conf.baseUrl + x.logoUrl} 
-                                    /> : null
-                                }
-                                <p>
-                                    { x.name }
-                                </p>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        )
-    }
-    _renderProfile(){
-         const co = this.state.companyList.filter((c)=>{
-            return c._id == this.state.selectedCompany;
-        })[0] || {};
-        const children = (co.children) ? this.state.companyList.filter((c)=>{
-            return co.children.includes(c._id)
-        }) : null;
-        const profileClass = [
-            Styles.companyProfile,
-            (this.props.selectedCompany) ? Styles.active : ""
-        ].join(" ");
-        return (
-            <div className={profileClass}>
-                { 
-                    (co.logoUrl) ? <img 
-                        className={Styles.logo}
-                        src={conf.baseUrl + co.logoUrl} 
-                    /> : null 
-                }
-                <h2>{co.name}</h2>
-                { 
-                    (co.website) ? (
-                        <a className={Styles.link} href={co.website}>
-                            {co.website}
-                        </a>
-                    ) : null
-                }
-                { (co.est) ? <p>{"est: " + co.est }</p> : null }
-                { this._renderChildren(children) }
-			</div>
-        );
-    }
 	render(){
         const {selectCompany} = this.props;
-        
+         const profileClass = [
+            Styles.companyProfile,
+            (this.props.selectedCompany) ? Styles.active : ""
+        ].join(" ");    
         return <div className={Styles.container}>
 		    <div className={Styles.network}>
-                <Network data={this.state.companyList} 
+                <Network 
+                    background="linear-gradient(to right, #EEE, #FFF)"
+                    height="100%"
+                    data={this.state.companyList} 
                     rels={this.state.companyRels}
                     selected={
                         (this.props.selectedCompany) ? [this.props.selectedCompany] 
@@ -127,12 +73,15 @@ class CompanyProfile extends Component {
                     } 
                 />
             </div>
-		    {this._renderProfile()}
+		    <div className={profileClass}>
+                <CompanyProfile />
+            </div>
         </div>
 	
 	}
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyProfile)
-
-
+export default connect(
+    mapStateToProps, 
+    mapDispatchToProps
+)(NetworkContainer);
