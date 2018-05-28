@@ -77,8 +77,10 @@ export default class Network extends Component {
 	});
    } 
    componentWillReceiveProps(newProps){
+       console.log("NETWORK RECEIVING PROPS", newProps);
         if (newProps.data != this.props.data || newProps.rels != this.props.rels) { 
-           this.drawNetwork(
+           console.log("REDRAWING IT ALL")
+            this.drawNetwork(
                 newProps.data || this.props.data,
                 newProps.rels || this.props.rels
             );

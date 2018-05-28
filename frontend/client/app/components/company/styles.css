@@ -13,6 +13,13 @@
     position: relative;
     z-index: 1;
 }
+.modeSelector {
+    width: 200px;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+}
 .companyProfile {
     position: absolute;
     top: 0px;
@@ -32,6 +39,4 @@
     max-width: 30%;
     opacity: 1;
 }
-
-
 

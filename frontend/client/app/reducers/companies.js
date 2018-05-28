@@ -1,7 +1,14 @@
+import { applyFilter } from '../utils/companies.js';
+
+
 const initialState = {
-   selectedCompany: null,  
+   selectedCompany: null,
+    filter: 'All',
     companyList: [],
-    companyRels: []
+    activeList: [],
+    companyRels: [],
+    activeRels: [],
+
 }
 
 export default function CompanyReducer(state = initialState, action){ 
@@ -21,7 +28,19 @@ export default function CompanyReducer(state = initialState, action){
             ...state,
             companyRels: action.companyRels
            }
-      default: return state
+       case 'SET_ACTIVE_LIST':
+            const changes = applyFilter(
+               state.companyList, 
+               state.companyRels, 
+               action.filter
+            )
+            console.log("REDUCER:: SORTED LISTS:", changes) 
+            return {
+                ...state, 
+                filter: action.filter,
+                ...changes
+            }
+       default: return state
    }
 }
 

@@ -19,3 +19,10 @@ export function updateCompanyRels(newListObj){
         companyRels: newListObj
     }
 }
+
+export function setActiveList(filter){
+    return {
+        type: 'SET_ACTIVE_LIST',
+        filter: filter
+    }
+}
