@@ -1,0 +1,10 @@
+.main {
+   padding-bottom: 10px;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+}
+.openerText {
+   max-width: 400px;
+   margin: 5px;
+}

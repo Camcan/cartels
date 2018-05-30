@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
-import EditorModal from './editorModal.js';
+import EditorModal from './editor/index.js';
+import API from '../../config/api.js';
+import questionmark from '../../img/questionmark.png';
+
+const baseUrl = API.baseUrl;
 
 export default class CompanyList extends Component {
    constructor(props){
@@ -26,8 +30,12 @@ export default class CompanyList extends Component {
    }
    _renderList(){
       return this.props.companyList.map((x)=>{
+         let logoUrl = (x.logoUrl) ? baseUrl + x.logoUrl : questionmark;
          return (
             <a className="button is-dark" style={{width: "100%", margin: "5px"}} onClick={()=> this.selectCompany(x)}>
+               <div style={{borderRadius: "50%", width: "30px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden"}}>
+                  <img style={{maxWidth: "50px"}} src={logoUrl} />
+               </div>
                <p style={{width: "100%", textAlign: "left"}}>{x.name}</p>
             </a>
          )
@@ -36,20 +44,25 @@ export default class CompanyList extends Component {
    }
    render(){
       return (
-         <div>
-            <h3 className="title">Companies Editor</h3>
-            <div className="card" style={{padding: "20px 50px"}}>
-               <div style={{display: "flex", justifyContent: "flex-end"}}>
-                  <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
-               </div>
+         <div className="card" style={{
+               maxWidth: "800px", 
+               padding: "20px 50px"
+         }}>
+            <header className="card-header">
+                <p className="card-header-title">
+                      Companies
+               </p> 
+               <a className="button is-primary" onClick={this.newCompany.bind(this)}>New Company</a>
+            </header>
                { this._renderList() }
-            </div>
             <EditorModal 
                companyData={this.state.selectedCompany} 
-               companyList={this.state.companyList} 
+               companyList={this.props.companyList} 
+               refreshData={this.props.refreshData}
                closeModal={()=> this.toggleModal(false)} 
                modalOpen={this.state.modalOpen}
             />
+
          </div>
       )
    }

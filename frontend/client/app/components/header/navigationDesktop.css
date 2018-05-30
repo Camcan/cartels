@@ -1,0 +1,27 @@
+.navDesktop{
+   display: none
+}
+
+@media screen and (min-width: 600px){
+   .navDesktop {
+      justify-content: right;
+      display: inherit;
+      display: flex;
+      flex-direction: column
+   }
+   .linksList{
+      margin: 5px 0px -4px;
+      padding: 0px;
+      display: flex;
+      flex-flow: row no-wrap;
+      justify-content: space-around
+   }
+   .linksList a{
+      text-decoration: none;
+      color: #000;
+      text-align: center;
+      padding: 5px;
+      margin: 0px 10px;
+      font-weight: 100;
+   }
+}

@@ -1,0 +1,45 @@
+.container {
+    position: absolute;
+    left: 5px;
+    min-height: 100%;
+    width: 99%;
+    margin: 20px auto;
+    display: flex;
+    flex-flow: row nowrap;
+    padding-bottom: 30px;
+}
+.network {
+    height: 100%;
+    width: 80%;
+    margin: 0px auto;
+    max-width: 95%;
+    position: relative;
+    z-index: 1;
+}
+.modeSelector {
+    width: 200px;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+}
+.companyProfile {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+    padding: 20px 5px;
+    overflow: hidden;
+    width: 50%;
+    max-width: 0px;
+    opacity: 0;
+    transition: max-width 0.3s ease-in, opacity 0.35s ease-in;
+    height: 100%;
+    color: #000;
+}
+
+.companyProfile.active {
+    max-width: 350px;
+    opacity: 1;
+}
+

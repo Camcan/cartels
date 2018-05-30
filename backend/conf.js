@@ -1,8 +1,11 @@
 const config = {
-   mongo: 'mongodb://mongo-db/auth'
+   mongo: 'mongodb://localhost',
+   uploads: {
+      path: './uploads/logos/',
+      name: 'db.json'
+   }
 };
 
 module.exports = {
    db: config
-   //secret: "Somethingsupersecret"
 }

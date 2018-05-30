@@ -1,4 +1,11 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+import AdminUtil from '../../../utils/admin.js';
+import config from '../../../config/api.js';
+import LogoUploader from './logoUpload.js';
+import questionmark from '../../../img/questionmark.png';
 
 export default class EditorModal extends Component {
    constructor(props){ 
@@ -11,22 +18,23 @@ export default class EditorModal extends Component {
       }
    }
    componentWillReceiveProps(newProps){
-     
-         this.setState({ 
-            ...newProps,
-            stageDelete: false            
-         });
+         this.clearModal();  
          if (newProps.companyData) {
             this.setState({
                companyList: this.props.companyList.filter((c)=> {
-                 return (c.id != newProps.companyData.id)
+                 return (c._id != newProps.companyData._id)
                }),
                stagedData: {},
                editing: true
             });
-         }else{
-            this.setState({editing: false})
          }
+   }
+   clearModal(){
+      this.setState({
+         editing: false,
+         stageDelete: false,
+         stagedData: {}
+      });
    }
    stageChange(key, e){
       let value = e.target.value;
@@ -34,20 +42,39 @@ export default class EditorModal extends Component {
          let toStage= this.state.stagedData;
          toStage[key] = value;
          this.setState({stagedData: toStage})
-         console.log("Staged Data:", this.state.stagedData);
       }
    }
    saveChange(action){
       if (action == 'create'){
-      
+          AdminUtil.createCompany(this.state.stagedData, (res)=>{
+            this.props.refreshData();
+            this.props.closeModal();
+            this.clearModal();
+         })
       } else if (action == 'update'){
-         
+         let postData = {
+            ...this.props.companyData,
+            ...this.state.stagedData,
+            logoUrl: this.props.companyData.logoUrl,
+            _id: this.props.companyData._id
+         };
+         console.log("Update Initialized...", postData)
+         AdminUtil.updateCompany(postData, (res)=>{
+            console.log(res);
+            this.props.refreshData();
+            this.props.closeModal();
+            this.clearModal(); 
+        });
       } else if (action == 'delete') {
-      
+         console.log("Deletion Initialized..") 
+         AdminUtil.removeCompany(this.props.companyData._id, (res)=>{
+            this.props.refreshData();
+            this.props.closeModal();
+            this.clearModal();
+         })
       }
    }
-   toggleCompany(idString, rel){
-      let id = parseInt(idString);
+   toggleCompany(id, rel){
       let staged = this.state.stagedData;
       let current = this.props.companyData || {};
       let selected = (staged[rel] || current[rel] || []);
@@ -73,7 +100,7 @@ export default class EditorModal extends Component {
                      none
                   </a> : toRender.map( (x) => {
                      let company = this.props.companyList.filter((c)=>{
-                        return c.id == x
+                        return c._id == x
                      })[0];
                      console.log("Child company:", company);
                      return <span onClick={()=>this.toggleCompany(x, 'children')} className="button">
@@ -85,17 +112,18 @@ export default class EditorModal extends Component {
                </div>
             )
    }
-   _renderDropdown(){
-      let current = this.state.stagedData || this.props.companyData;
-      let companyList = this.state.companyList;
-      let id = (this.state.editing) ? this.props.companyData.id : 0;
-      if (current.children) {
-         console.log("Existing Children...", current.children)
-         companyList = this.props.companyList.filter((c)=> {
-            return (!current.children.includes(c.id) & (c.id != id) )
+   _renderDropdown(current, staged){
+      let children = (staged) ? (staged.children || current.children) : ((current.children) ? current.children : []);
+      let id = (this.state.editing) ? this.props.companyData._id : 0;
+      let companyList = this.props.companyList.filter((c)=>{
+         return c._id != id
+      });
+      if (children) {
+         console.log("Existing Children...", children)
+         companyList = companyList.filter((c)=> {
+            return !children.includes(c._id)
          });
-         console.log("CompanyList:", companyList)
-      };
+      }
       return (
          <div className="control">
            <div className="select">
@@ -104,12 +132,21 @@ export default class EditorModal extends Component {
 
                      {
                         companyList.map((c)=> {
-                           return <option value={c.id}>{c.name}</option>
+                           return <option value={c._id}>{c.name}</option>
                         })
                      }
                </select>
             </div>
          </div>
+      )
+   }
+   _renderLogo(co){
+         const logoUrl = (co.logoUrl) ? config.baseUrl + co.logoUrl : questionmark;
+         return <img src={logoUrl} style={{maxWidth: "100px"}}/>
+   }
+   _renderLogoUpload(){
+      if (this.state.editing) return (
+         <LogoUploader companyId={this.props.companyData._id} refreshData={this.props.refreshData}/>
       )
    }
    _renderSaveButton(){
@@ -120,7 +157,7 @@ export default class EditorModal extends Component {
                <span class="icon is-small">
                   <i class="fas fa-check"></i>
                </span>
-               {(this.state.editing) ? "Save Changes": "Save Changes"}
+               {(this.state.editing) ? "Save Changes": "Create Company"}
             </button>
       )
    }
@@ -137,22 +174,54 @@ export default class EditorModal extends Component {
    render(){
       let staged = this.state.stagedData;
       let current = this.props.companyData || {};
-      let activeClass = (this.state.modalOpen) ? "is-active " : "";
-      console.log("Staged:", staged)
+      let activeClass = (this.props.modalOpen) ? "is-active " : "";
+      let currentName = (staged.name) ? staged.name : (current.name || "");
       return (
          <div className={"modal " + activeClass }>
             <div className="modal-background" onClick={this.props.closeModal}></div>
                <div className="modal-card">
+                  <header className="modal-card-head">
+                     <p className="modal-card-title">{currentName}</p>
+                     {this._renderLogo(current)}
+                  </header>
                   <div className="modal-card-body">   
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Company Name:</label>
                         <div className="control">
                            <input className="input" type="text" 
-                              value={(staged.name) ? staged.name : current.name}
+                              value={currentName}
                               onChange={(e)=>this.stageChange("name", e)}
                               placeholder="Company Name" />
                         </div>
                      </div>
+                     <div className="field is-horizontal">
+                        <label className="label" style={{width: "150px", textAlign: "right"}}>Website:</label>
+                        <div className="control">
+                           <input className="input" type="text" 
+                              value={staged.website || current.website || ""}
+                              onChange={(e)=>this.stageChange("website", e)}
+                              placeholder="www.example.com" />
+                        </div>
+                     </div>
+                     {this._renderLogoUpload()}
+                     <div className="field is-horizontal">
+                        <label className="label" style={{width: "150px", textAlign: "right"}}>Established:</label>
+                        <div className="control">
+                        <DatePicker selected={moment((current.est||staged.est))}
+                           onChange={(t)=>this.setState({
+                                 stagedData: {
+                                    ...this.state.stagedData,
+                                    est: (t) ? t.unix() : undefined
+                                 }
+                           })}
+                        />   
+                        <input className="input" type="text" 
+                              value={moment(((staged.est)? staged.est : current.est)||new Date()).format('MMMM Do YYYY')}
+                              onChange={(e)=>this.stageChange("est", e)}
+                              placeholder="Date Established" />
+                        </div>
+                     </div>
+                     
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>Child Companies:</label>
                         <div className="control">
@@ -162,13 +231,13 @@ export default class EditorModal extends Component {
                      <div className="field is-horizontal">
                         <label className="label" style={{width: "150px", textAlign: "right"}}>New Child:</label>
                         <div className="control">
-                           {this._renderDropdown()} 
+                           {this._renderDropdown(staged, current)} 
                         </div>
                      </div>
                   </div>
                   <div className="modal-card-foot">
                      { this._renderSaveButton() }
-                     { this._renderDeleteButton() } 
+                     { (this.state.editing) ? this._renderDeleteButton() : null } 
                      <button className="button" onClick={this.props.closeModal}>Cancel</button>
                   </div>
                </div>
