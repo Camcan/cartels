@@ -1,29 +1,26 @@
-const serverUrl = [
-    'http://',
-    '149.28.167.13', 
-    ':3000/api/' 
-].join('')
+const defaultOptions = {
+    header:{ 'Access-Control-Allow-Origin':'*'},
+    mode: 'cors'
+};
 
 const API = {
-   getCompanyList: (cb)=>{
+   getCompanyList: (serverUrl, cb)=>{
     fetch(
             [serverUrl, "companies"].join(''),
-            {mode: 'cors'}
+            defaultOptions
       ).then((res)=>res.json())
       .then((data)=>{
-         console.log("ServerUrl:", serverUrl)
          cb(data)             
       })
       .catch((err)=>{
          throw err
       });
     },
-   getRelationships:(cb)=>{
+   getRelationships:(serverUrl, cb)=>{
       fetch(
            [serverUrl, "companies/relationships"].join(''),
-           {mode: 'cors'}
+           defaultOptions
       ).then((res)=>{
-         console.log(res.body)
          return res.json()
       })
       .then((data)=>{

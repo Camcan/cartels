@@ -1,15 +1,18 @@
 .container {
-    position: relative;
-    height: 80%;
+    position: absolute;
+    left: 5px;
+    min-height: 100%;
     width: 99%;
-    margin: 0px auto;
+    margin: 20px auto;
     display: flex;
     flex-flow: row nowrap;
+    padding-bottom: 30px;
 }
 .network {
     height: 100%;
-    min-width: 70%;
-    max-width: 90%;
+    width: 80%;
+    margin: 0px auto;
+    max-width: 95%;
     position: relative;
     z-index: 1;
 }
@@ -36,7 +39,7 @@
 }
 
 .companyProfile.active {
-    max-width: 30%;
+    max-width: 350px;
     opacity: 1;
 }
 
