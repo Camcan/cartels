@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import Styles from './companyProfile.css';
-import Network from '../network/index.jsx';
 
 
 class CompanyProfile extends Component { 
@@ -15,16 +14,16 @@ class CompanyProfile extends Component {
 	
     }
 	componentWillReceiveProps(newProps){
-         this.setState({
+        this.setState({
              ...newProps
          });
 	}
     _renderChildren(children){
          if (children) return (
              <div className={Styles.childrenContainer}>
-                 <div className={Styles.children}>
+                <h3>Children:</h3>
+                <div className={Styles.children}>
                    
-                    <h3>Children:</h3>
                     {
                         children.map((x)=>{
                             return (
@@ -40,7 +39,7 @@ class CompanyProfile extends Component {
                                     {
                                         (x.logoUrl) ? (
                                             <div className={Styles.logo}>
-                                                <img src={conf.baseUrl + x.logoUrl} /> 
+                                                <img src={this.props.apiUrl + x.logoUrl} /> 
                                             </div> 
                                         ) : null
                                     }
@@ -73,7 +72,7 @@ class CompanyProfile extends Component {
                     { 
                         (co.logoUrl) ? <img 
                             className={Styles.logo}
-                            src={conf.baseUrl + co.logoUrl} 
+                            src={this.props.apiUrl + co.logoUrl} 
                         /> : null 
                     }
                     <div className={Styles.content}>

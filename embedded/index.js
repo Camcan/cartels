@@ -1,54 +1,52 @@
 import React, {Component} from 'react';
 import API from './api.js';
 import Styles from './styles.css';
-import Network from './network.jsx';
-import ModeSelector from './modeSelector.jsx';
-import CompanyProfile from './companyProfile.jsx';
+import Network from './network.js';
+import ModeSelector from './modeSelector.js';
+import CompanyProfile from './companyProfile.js';
+
+const apiUrl = [
+    'https://',
+    'alfordgeo.co.nz', 
+    ':8443/api/' 
+].join('');
 
 class NetworkContainer extends Component { 
 	constructor(props){
 		super(props);
 		this.state = {
-            companyList: [].
+            companyList: [],
                activeList: [],
                companyRels: [],
                activeRels: [],
-               filter: [],
-               selectedCompany: []
+               filter: 'All',
+               selectedCompany: null
         }
 	}
 	componentDidMount(){
-        console.log("mounting...")
-      API.getRelationships((data)=>{
-        console.log(data);
-        this.props.updateCompanyList(data.companyList);
-        this.props.updateCompanyRels(data.relationships);
-        this.props.setActiveList('All');
+      API.getRelationships(apiUrl, (data)=>{
+        this.setState({
+            companyList: data.companyList,
+            activeList: data.companyList,
+            companyRels: data.relationships,
+            activeRels: data.relationships,
+        });
       });
 	}
 	componentWillReceiveProps(newProps){
-        console.log("Container newProos;", newProps) 
         this.setState({
              ...newProps
          });
 	}
 	render(){
-        const {
-            selectCompany, 
-            setActiveList,
-            activeList,
-            activeRels,
-            filter,
-            companiesList
-        } = this.props;
          const profileClass = [
             Styles.companyProfile,
-            (this.props.selectedCompany) ? Styles.active : ""
+            (this.state.selectedCompany) ? Styles.active : ""
         ].join(" ");    
         return <div className={Styles.container}>
 		    <div className={Styles.network}>
                 <div className={Styles.modeSelector}>
-                    <ModeSelector select={(list)=>this.setState({filter: filter})}
+                    <ModeSelector select={(filter)=>this.setState({filter: filter})}
                         options={["All"]}
                         active={this.state.filter}
                     />
@@ -58,6 +56,7 @@ class NetworkContainer extends Component {
                     height="100%"
                     data={this.state.activeList} 
                     rels={this.state.activeRels}
+                    api={apiUrl}
                     selected={
                         (this.state.selectedCompany) ? [this.state.selectedCompany] 
                         : null
@@ -65,13 +64,13 @@ class NetworkContainer extends Component {
                     handleSelection={
                         (id)=>{
                             this.setState({selectedCompany: id});
-                            console.log("SelectingCompany", id);
                         }
                     } 
                 />
             </div>
 		    <div className={profileClass}>
                 <CompanyProfile 
+                    apiUrl={apiUrl}
                     companyList={this.state.companyList}
                     selectedCompany={this.state.selectedCompany}
                 />
@@ -81,7 +80,4 @@ class NetworkContainer extends Component {
 	}
 };
 
-export default connect(
-    mapStateToProps, 
-    mapDispatchToProps
-)(NetworkContainer);
+export default NetworkContainer;

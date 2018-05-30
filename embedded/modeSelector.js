@@ -22,15 +22,7 @@ class ModeSelector extends Component {
     _renderOptions(options, current){
        return options.map((o)=>{
              return (
-                 <a className={
-                         [
-                            "button",
-                            "is-small",
-                            "is-inverted",
-                            "is-outlined",
-                            (o == current) ? "is-active" : null
-                        ].join(" ")
-                    }
+                 <a className={(o == current) ? "is-active" : null}
                     onClick={()=>this.props.select(o)}
                  > 
                     {o}
@@ -41,15 +33,13 @@ class ModeSelector extends Component {
     render(){
         return (
             <div className={Styles.container}>
-                <span>Show: </span>
+                <p>Show: </p>
                 { 
-                    this._renderOptions(
-                        this.props.options, 
-                        this.props.active
-                    ) 
+                  this._renderOptions(
+                    this.props.options, 
+                    this.props.active
+                  )
                 }
-            
-           
             </div>
         );
     }
