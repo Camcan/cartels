@@ -1,0 +1,31 @@
+.container {
+    width: 100%;
+    max-width: 200px;
+}
+.container .input {
+    margin: 2px 2px 2px 0px;
+    color: #000;
+}
+.results {
+    display: flex;
+    flex-flow: column wrap;
+    padding: 0px 5px;
+    height: 0px;
+    opacity: 0;
+    transition: opacity 0.15s ease-in, height 0.3s ease-out;
+}
+.results.active {
+    height: auto;
+    opacity: 1;
+    overflow: scroll-y;
+}
+.results a {
+    height: 1.4em;
+    padding: 0px 5px;
+    margin: 0px 5px;
+    background: #000;
+    transition: filter 0.2s ease-out;
+}
+.results a:hover {
+    filter: invert(100%)
+}
