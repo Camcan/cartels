@@ -7,5 +7,6 @@ const config = {
 };
 
 module.exports = {
-   db: config
+   	port: 8443,
+	db: config
 }

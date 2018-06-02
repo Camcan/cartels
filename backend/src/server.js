@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const https = require('https');
 const app = express();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -13,14 +14,35 @@ const fs = require('fs');
 const path = require('path');
 const ip = require('ip');
 
+const PORT = config.port || 8080;
+const httpsServer = https.createServer({
+	passphrase: "dat rhythm",
+	key: fs.readFileSync(__dirname + '/key.pem'),
+	cert: fs.readFileSync(__dirname + '/cert.pem')
+}, app);
+
 app.use('/api/uploads', express.static(
     path.join(__dirname, '../uploads')
 ));
+app.use('/', express.static(
+    path.join(__dirname, '../static')
+));
 app.use(cors({
-      origin: 'http://' + "localhost", // ip.address(),
+      origin: [
+	'http://localhost', 
+	'http://localhost:3000',
+	'https://www.camcan.co/'
+	// ip.address(),
+      ],
       optionSuccessStatus: 200
    })
 );
+
+app.use((req, res, next)=> {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}); 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
@@ -177,7 +199,7 @@ app.post('/api/companies/remove', verifyToken, (req, res, next)=>{
       else res.status(200).send(result)
    })
 })
-app.listen(3000, (req, res)=>{
-     console.log('Listening for magick on port 3000...')
+httpsServer.listen(PORT, (req, res)=>{
+     console.log('Listening for magick on port ' +  PORT + '...')
 })
 
