@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-
+import CompanyList from './companyList.js';
 import Styles from './companyProfile.css';
-
 
 class CompanyProfile extends Component { 
 	constructor(props){
@@ -22,35 +21,10 @@ class CompanyProfile extends Component {
          if (children) return (
              <div className={Styles.childrenContainer}>
                 <h3>Children:</h3>
-                <div className={Styles.children}>
-                   
-                    {
-                        children.map((x)=>{
-                            return (
-                                <a className={[
-                                    Styles.child,
-                                    "button",
-                                    "is-black",
-                                    "is-small"
-                                ].join(" ")}
-                                    onClick={
-                                        ()=>this.props.selectNode(x._id)
-                                }>
-                                    {
-                                        (x.logoUrl) ? (
-                                            <div className={Styles.logo}>
-                                                <img src={this.props.apiUrl + x.logoUrl} /> 
-                                            </div> 
-                                        ) : null
-                                    }
-                                    <p>
-                                        { x.name }
-                                    </p>
-                                </a>
-                            )
-                        })
-                    }
-                </div>
+                <CompanyList list={children} 
+                    select={(id)=>this.props.selectNode(id)}
+                    active={this.props.selectedCompany._id}
+                />
              </div>
         )
     }

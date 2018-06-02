@@ -54,48 +54,4 @@
     text-align: left;
     margin: 0px 0px 10px;
 }
-.children {
-    margin: 0px;
-    max-width: 95%;
-    max-height: 300px;
-    overflow-y: scroll;
-}
-.child {
-    margin: 2px 5px 2px 20px;
-    display: flex;
-    background: #000;
-    border-radius: 2px;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-    height: 40px;
-    transition: background 0.2s ease-in;
-    overflow: hidden;
-}
-.child p {
-    color: #FFF;
-    transition: color 0.2s ease-in;
-}
-.child:hover {
-    background: #eee;
-    color: #000;
-}
-.child:hover p {
-    color: #000;
-}
 
-.child .logo {
-    background: #FFF;
-    margin: 2px 5px 2px;
-    overflow: hidden;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.logo img {
-    height: 20px;
-    width: auto;
-}

@@ -3,6 +3,7 @@ import API from './api.js';
 import Styles from './styles.css';
 import Network from './network.js';
 import ModeSelector from './modeSelector.js';
+import Search from './search.js';
 import CompanyProfile from './companyProfile.js';
 
 const apiUrl = [
@@ -49,6 +50,12 @@ class NetworkContainer extends Component {
                     <ModeSelector select={(filter)=>this.setState({filter: filter})}
                         options={["All"]}
                         active={this.state.filter}
+                    />
+                    <Search list={this.state.activeList}
+                        active={this.state.selectedCompany}
+                        handleSelection={(id)=>
+                            this.setState({selectedCompany: id})
+                        }
                     />
                 </div>
                 <Network 
