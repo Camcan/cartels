@@ -58,7 +58,7 @@ app.get('/api/users', (req, res) => {
       res.send(resp)
    })
 })
-app.post('/api/newuser', (req, res) => {
+app.post('/api/newuser', verifyToken, (req, res) => {
    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
    c.addUser({
             email: req.body.email,
@@ -77,6 +77,7 @@ app.post('/api/newuser', (req, res) => {
      });
    });
 });
+
 app.post('/api/login', (req,res)=>{
    c.getUser({email: req.body.email}, (err, user)=>{
          if (err) return res.status(500).send('Error on the server.');
