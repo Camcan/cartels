@@ -68,9 +68,8 @@
                              var DONE = 4;
                               var OK = 200; 
                               if (xhr.readyState === DONE) {
-                                 if (xhr.status === OK) 
-                                 var res = JSON.parse(xhr.response);
-                                 console.log(res, 'Token:', res.token, res.token);
+                                 if (xhr.status === OK)
+                                 var res = xhr.response;
                                  var redir = './admin?token=' + res.token;
                                  window.localStorage.setItem('auth-token', res.token);
                                  window.location.href = redir;

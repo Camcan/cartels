@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const ip = require('ip');
 
 let serverUrl = "alfordgeo.co.nz"; 
-serverUrl = 'http://' + serverUrl + ':8443/api/'; //process.env.BACKEND_URL
+serverUrl = 'https://' + serverUrl + ':8443/api/'; //process.env.BACKEND_URL
 
 
 const authUtil = {
@@ -16,7 +16,6 @@ const authUtil = {
       }).then(res => res.json())
       .catch(error => next(error))
       .then(response => {
-         response = JSON.parse(response);
          return  next(null, response.auth)
       });
    },
@@ -26,11 +25,9 @@ const authUtil = {
             mode: 'cors',   
             body: JSON.stringify(credentials),
             headers: { 'Content-Type': 'application/json'}
-      }).then(res =>{ 
-         return res.json()
-      })
-      .catch(error => next(error))
-      .then(response => {
+      }).then(res => res.json())
+        .catch(error => next(error))
+        .then(response => {
          next(null, response)
       })
    }
