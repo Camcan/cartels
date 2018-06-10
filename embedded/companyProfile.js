@@ -17,13 +17,28 @@ class CompanyProfile extends Component {
              ...newProps
          });
 	}
+    _renderParents(parents){
+        if (parents.length > 0) return (
+         <div className={Styles.parentsContainer}>
+                <h3>Owned By:</h3>
+                <CompanyList list={parents} 
+                    select={(id)=>this.props.selectCompany(id)}
+                    active={this.props.selectedCompany._id}
+                    apiUrl={this.props.apiUrl}
+                />
+             
+            <div className={Styles.separator}></div>
+            </div>
+        )
+    }
     _renderChildren(children){
          if (children) return (
              <div className={Styles.childrenContainer}>
-                <h3>Children:</h3>
+                <h3>Subsidiaries:</h3>
                 <CompanyList list={children} 
-                    select={(id)=>this.props.selectNode(id)}
+                    select={(id)=>this.props.selectCompany(id)}
                     active={this.props.selectedCompany._id}
+                    apiUrl={this.props.apiUrl}
                 />
              </div>
         )
@@ -35,7 +50,15 @@ class CompanyProfile extends Component {
         const children = (co.children) ? this.props.companyList.filter((c)=>{
             return co.children.includes(c._id)
         }) : null;
-        
+        let parents = this.props.companyRels.filter((rel)=>{
+                        return (rel.to == co._id)
+            }).map((rel)=>{
+                return rel.from;
+        });
+        parents = this.props.companyList.filter((c)=>{
+                return (parents.indexOf(c._id) > -1); 
+        });
+        console.log("PARETNST::", parents);
         return (
             <div className={[
                     Styles.container,
@@ -61,7 +84,9 @@ class CompanyProfile extends Component {
                         { (co.est) ? <p>{"est: " + co.est }</p> : null }
                     </div>
                 </div>
-                <div className={Styles.separator}></div>
+                
+                 <div className={Styles.separator}></div>
+                { this._renderParents(parents) }
                 { this._renderChildren(children) }
             </div>
         );

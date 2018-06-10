@@ -7,7 +7,12 @@ export default class Network extends Component {
       this.drawNetwork = this.drawNetwork.bind(this);
    }
    componentDidMount(){
-   	this.drawNetwork(this.props.data, this.props.rels)
+        this.drawNetwork(this.props.data, this.props.rels);
+       this.setState({
+            nodeIds: this.props.data.map((i)=>{
+                return i._id
+            })
+        })
    }
    drawNetwork(data, rels){ 
          let width = 67;
@@ -69,7 +74,7 @@ export default class Network extends Component {
     this.network = draw(nodes, edges);
     this.network.on('click', (pros)=>{
         var ids = pros.nodes;
-        ids = (ids.length > 0) ? ids[0] : null;
+        ids = (ids[0]) ? ids[0] : null;
 		this.props.handleSelection(ids);
 	});
    } 
@@ -79,12 +84,32 @@ export default class Network extends Component {
                 newProps.data || this.props.data,
                 newProps.rels || this.props.rels
             );
-        } else (newProps.selected) ? this.network.selectNodes(newProps.selected) : console.log("No selection");
-   }
+            this.setState({
+                nodeIds: newProps.data.map((i)=>{return i._id})
+            });
+        } else if (newProps.selected != this.props.selected) {
+            const animation = {
+                animation: {
+                    duration: 300,
+                    easingFunction: 'easeOutQuad'
+                }
+            };
+            if (newProps.selected) {
+                this.network.selectNodes(newProps.selected);
+                this.network.fit({
+                    nodes: newProps.selected,    
+                    ...animation
+                }) 
+            } else {
+                this.network.fit(animation);
+            };
+        };
+    }
     render(){
       return (
                <div id="mynetwork" style={{
-                   height: this.props.height || "500px", 
+                   height: this.props.height || "500px",
+                   width: this.props.width || "inherit",
                    background: this.props.background || "#eee"}}></div>
       )
    }
