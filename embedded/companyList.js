@@ -8,7 +8,7 @@ class CompanyList extends Component {
 		super(props);
 		this.state = {
             list: props.list || null,
-            active: props.active || null
+            active: props.active || null,
             ...props
         }
 	}
@@ -30,6 +30,7 @@ class CompanyList extends Component {
                                 (x._id == this.state.active) ? Styles.active : null
                             ].join(" ")}
                             onClick={()=>this.props.select(x._id)}
+                            key={x._id}
                         >
                             {
                                 (x.logoUrl) ? (

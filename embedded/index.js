@@ -53,8 +53,11 @@ class NetworkContainer extends Component {
                     />
                     <Search list={this.state.activeList}
                         active={this.state.selectedCompany}
-                        handleSelection={(id)=>
-                            this.setState({selectedCompany: id})
+                        apiUrl={apiUrl}
+                        selectCompany={
+                            (id)=>this.setState({
+                                selectedCompany: id
+                            })
                         }
                     />
                 </div>
@@ -79,8 +82,14 @@ class NetworkContainer extends Component {
                 <CompanyProfile 
                     apiUrl={apiUrl}
                     companyList={this.state.companyList}
+                    companyRels={this.state.companyRels}
                     selectedCompany={this.state.selectedCompany}
-                />
+                    selectCompany={
+                        (id)=>this.setState({
+                            selectedCompany: id
+                        })
+                    }    
+            />
             </div>
         </div>
 	

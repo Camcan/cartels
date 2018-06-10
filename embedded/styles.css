@@ -1,26 +1,28 @@
 .container {
     position: absolute;
     left: 5px;
-    min-height: 100%;
-    width: 99%;
-    margin: 20px auto;
+    right: 5px;
+    min-height: 300px;
+    max-height: 550px;
+    max-width: 98%;
+    margin: 20px 0px;
     display: flex;
     flex-flow: row nowrap;
     padding-bottom: 30px;
 }
 .network {
     height: 100%;
-    width: 80%;
+    max-width: 100%;
     margin: 0px auto;
-    max-width: 95%;
     position: relative;
     z-index: 1;
 }
 .modeSelector {
+    height: auto;
     width: 200px;
     position: absolute;
     z-index: 2;
-    top: 0px;
+    top: 5px;
     left: 0px;
 }
 .companyProfile {
